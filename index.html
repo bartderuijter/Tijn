@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Snake</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -12,15 +12,17 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       min-height: 100vh;
       font-family: 'Courier New', monospace;
       color: #eee;
+      padding: 12px 8px 20px;
+      overflow-x: hidden;
     }
 
     h1 {
-      font-size: 2.5rem;
-      margin-bottom: 0.5rem;
+      font-size: 2rem;
+      margin-bottom: 6px;
       color: #4ecca3;
       letter-spacing: 4px;
       text-transform: uppercase;
@@ -28,49 +30,197 @@
 
     #scoreboard {
       display: flex;
-      gap: 3rem;
-      margin-bottom: 1rem;
-      font-size: 1rem;
+      gap: 1.5rem;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
       color: #a0a0c0;
+      flex-wrap: wrap;
+      justify-content: center;
     }
-
     #scoreboard span { color: #4ecca3; font-weight: bold; }
+
+    #coins-display { color: #f5a623; }
+    #coins-display span { color: #f5a623; }
 
     canvas {
       border: 2px solid #4ecca3;
       border-radius: 4px;
       box-shadow: 0 0 30px rgba(78, 204, 163, 0.3);
       display: block;
+      max-width: 100%;
+      touch-action: none;
     }
 
     #message {
-      margin-top: 1.2rem;
-      font-size: 0.95rem;
+      margin-top: 8px;
+      font-size: 0.85rem;
       color: #a0a0c0;
       text-align: center;
-      min-height: 1.4em;
+      min-height: 1.3em;
+      padding: 0 8px;
     }
-
     #message strong { color: #fff; }
 
-    #btn-start {
-      margin-top: 1rem;
-      padding: 0.6rem 2rem;
+    /* Top button row */
+    #btn-row {
+      display: flex;
+      gap: 0.6rem;
+      margin-top: 8px;
+    }
+
+    .btn {
+      padding: 0.5rem 1.2rem;
       background: #4ecca3;
       color: #1a1a2e;
       border: none;
       border-radius: 4px;
-      font-size: 1rem;
+      font-size: 0.9rem;
       font-family: inherit;
       font-weight: bold;
       cursor: pointer;
-      letter-spacing: 2px;
+      letter-spacing: 1px;
       text-transform: uppercase;
-      transition: background 0.2s;
+      transition: background 0.15s;
+    }
+    .btn:hover { background: #38b28a; }
+    .btn:active { background: #2a9070; }
+    .btn:focus { outline: 2px solid #fff; }
+
+    #btn-shop {
+      background: #f5a623;
+      color: #1a1a2e;
+    }
+    #btn-shop:hover { background: #d4901e; }
+
+    /* D-pad touch controls */
+    #dpad {
+      display: none;
+      margin-top: 14px;
+      position: relative;
+      width: 150px;
+      height: 150px;
+      flex-shrink: 0;
     }
 
-    #btn-start:hover { background: #38b28a; }
-    #btn-start:focus { outline: 2px solid #fff; }
+    .dpad-btn {
+      position: absolute;
+      width: 46px;
+      height: 46px;
+      background: rgba(78, 204, 163, 0.18);
+      border: 2px solid rgba(78, 204, 163, 0.5);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      transition: background 0.1s;
+    }
+    .dpad-btn:active, .dpad-btn.pressed {
+      background: rgba(78, 204, 163, 0.5);
+    }
+    #dpad-up    { top: 0;    left: 52px; }
+    #dpad-down  { bottom: 0; left: 52px; }
+    #dpad-left  { top: 52px; left: 0;   }
+    #dpad-right { top: 52px; right: 0;  }
+
+    @media (pointer: coarse) {
+      #dpad { display: flex; }
+    }
+
+    /* ===== SHOP MODAL ===== */
+    #shop-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+    #shop-overlay.open { display: flex; }
+
+    #shop-modal {
+      background: #16213e;
+      border: 2px solid #4ecca3;
+      border-radius: 10px;
+      padding: 20px;
+      width: min(440px, 96vw);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    #shop-modal h2 {
+      color: #4ecca3;
+      text-align: center;
+      margin-bottom: 4px;
+      letter-spacing: 3px;
+    }
+    #shop-wallet {
+      text-align: center;
+      color: #f5a623;
+      font-size: 0.9rem;
+      margin-bottom: 14px;
+    }
+
+    #skin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 10px;
+    }
+
+    .skin-card {
+      background: #1a2550;
+      border: 2px solid #2a3570;
+      border-radius: 8px;
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .skin-card:hover { border-color: #4ecca3; }
+    .skin-card.selected { border-color: #4ecca3; background: #1e3060; }
+    .skin-card.locked { opacity: 0.6; cursor: default; }
+    .skin-card.locked:hover { border-color: #2a3570; }
+
+    .skin-preview {
+      width: 60px;
+      height: 20px;
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skin-name {
+      font-size: 0.75rem;
+      color: #ccc;
+      text-align: center;
+    }
+    .skin-price {
+      font-size: 0.7rem;
+      color: #f5a623;
+    }
+    .skin-badge {
+      font-size: 0.65rem;
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-weight: bold;
+    }
+    .badge-owned  { background: #2d9e7e; color: #fff; }
+    .badge-active { background: #4ecca3; color: #1a1a2e; }
+    .badge-buy    { background: #f5a623; color: #1a1a2e; cursor: pointer; }
+    .badge-buy:hover { background: #d4901e; }
+
+    #shop-close {
+      display: block;
+      margin: 16px auto 0;
+      padding: 0.5rem 2rem;
+    }
   </style>
 </head>
 <body>
@@ -80,32 +230,121 @@
     <div>Score: <span id="score">0</span></div>
     <div>Highscore: <span id="highscore">0</span></div>
     <div>Level: <span id="level">1</span></div>
+    <div id="coins-display">Munten: <span id="coins">0</span></div>
   </div>
 
   <canvas id="canvas" width="400" height="400"></canvas>
 
-  <div id="message">Druk op <strong>Start</strong> of <strong>Spatiebalk</strong> om te spelen</div>
-  <button id="btn-start">Start</button>
+  <div id="message">Druk op <strong>Start</strong> om te spelen</div>
+
+  <div id="btn-row">
+    <button class="btn" id="btn-start">Start</button>
+    <button class="btn" id="btn-shop">🏪 Shop</button>
+  </div>
+
+  <!-- D-pad for touch -->
+  <div id="dpad">
+    <div class="dpad-btn" id="dpad-up">▲</div>
+    <div class="dpad-btn" id="dpad-down">▼</div>
+    <div class="dpad-btn" id="dpad-left">◀</div>
+    <div class="dpad-btn" id="dpad-right">▶</div>
+  </div>
+
+  <!-- Shop modal -->
+  <div id="shop-overlay">
+    <div id="shop-modal">
+      <h2>🏪 Skin Shop</h2>
+      <div id="shop-wallet">Munten: <span id="shop-coins">0</span></div>
+      <div id="skin-grid"></div>
+      <button class="btn" id="shop-close">Sluiten</button>
+    </div>
+  </div>
 
   <script>
+    // ─── Canvas & constants ───────────────────────────────────────────────────
     const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
+    const ctx    = canvas.getContext('2d');
 
     const GRID = 20;
-    const COLS = canvas.width / GRID;   // 20
-    const ROWS = canvas.height / GRID;  // 20
+    const COLS = canvas.width  / GRID;
+    const ROWS = canvas.height / GRID;
 
-    const COLOR_BG   = '#16213e';
-    const COLOR_GRID = '#1a2550';
-    const COLOR_HEAD = '#4ecca3';
-    const COLOR_BODY = '#2d9e7e';
-    const COLOR_FOOD = '#e94560';
+    const COLOR_BG    = '#16213e';
+    const COLOR_GRID  = '#1a2550';
+    const COLOR_FOOD  = '#e94560';
     const COLOR_BONUS = '#f5a623';
 
-    let snake, dir, nextDir, food, bonus, score, highscore, level, speed, gameLoop, state;
+    // ─── Skin definitions ────────────────────────────────────────────────────
+    const SKINS = [
+      {
+        id: 'classic',
+        name: 'Klassiek',
+        price: 0,
+        head: '#4ecca3',
+        body: '#2d9e7e',
+        eye: '#1a1a2e',
+      },
+      {
+        id: 'fire',
+        name: 'Vuur',
+        price: 80,
+        head: '#ff4500',
+        body: '#cc2200',
+        eye: '#ffff00',
+      },
+      {
+        id: 'ocean',
+        name: 'Oceaan',
+        price: 80,
+        head: '#00bfff',
+        body: '#0077cc',
+        eye: '#fff',
+      },
+      {
+        id: 'gold',
+        name: 'Goud',
+        price: 150,
+        head: '#ffd700',
+        body: '#b8960c',
+        eye: '#1a1a2e',
+      },
+      {
+        id: 'galaxy',
+        name: 'Galaxy',
+        price: 200,
+        head: '#9b59b6',
+        body: '#6c3483',
+        eye: '#4ecca3',
+      },
+      {
+        id: 'rainbow',
+        name: 'Regenboog',
+        price: 300,
+        head: null,   // special: animated per segment
+        body: null,
+        eye: '#fff',
+      },
+    ];
 
-    highscore = parseInt(localStorage.getItem('snake_hs') || '0');
-    document.getElementById('highscore').textContent = highscore;
+    // ─── Persistent state ─────────────────────────────────────────────────────
+    function loadSave() {
+      try { return JSON.parse(localStorage.getItem('snake_save') || '{}'); } catch { return {}; }
+    }
+    function writeSave(data) {
+      localStorage.setItem('snake_save', JSON.stringify(data));
+    }
+
+    let save = loadSave();
+    if (!save.highscore) save.highscore = parseInt(localStorage.getItem('snake_hs') || '0');
+    if (!save.coins)     save.coins = 0;
+    if (!save.owned)     save.owned = ['classic'];
+    if (!save.skin)      save.skin  = 'classic';
+    writeSave(save);
+
+    // ─── Game state ───────────────────────────────────────────────────────────
+    let snake, dir, nextDir, food, bonus, score, level, speed, gameLoop, state;
+
+    function getSkin() { return SKINS.find(s => s.id === save.skin) || SKINS[0]; }
 
     function randomCell(exclude = []) {
       let cell;
@@ -116,30 +355,35 @@
     }
 
     function init() {
-      snake = [
-        { x: 10, y: 10 },
-        { x: 9,  y: 10 },
-        { x: 8,  y: 10 },
-      ];
-      dir = { x: 1, y: 0 };
+      snake   = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
+      dir     = { x: 1, y: 0 };
       nextDir = { x: 1, y: 0 };
-      food = randomCell(snake);
-      bonus = null;
-      score = 0;
-      level = 1;
-      speed = 150;
-      state = 'playing';
+      food    = randomCell(snake);
+      bonus   = null;
+      score   = 0;
+      level   = 1;
+      speed   = 150;
+      state   = 'playing';
       updateUI();
     }
 
     function updateUI() {
-      document.getElementById('score').textContent = score;
-      document.getElementById('level').textContent = level;
-      document.getElementById('highscore').textContent = highscore;
+      document.getElementById('score').textContent     = score;
+      document.getElementById('level').textContent     = level;
+      document.getElementById('highscore').textContent = save.highscore;
+      document.getElementById('coins').textContent     = save.coins;
+      document.getElementById('shop-coins').textContent = save.coins;
     }
 
     function setMessage(msg) {
       document.getElementById('message').innerHTML = msg;
+    }
+
+    // ─── Drawing ──────────────────────────────────────────────────────────────
+    const RAINBOW = ['#ff4444','#ff9900','#ffee00','#44cc44','#4499ff','#9944ff'];
+
+    function rainbowColor(index) {
+      return RAINBOW[index % RAINBOW.length];
     }
 
     function drawGrid() {
@@ -148,60 +392,55 @@
       ctx.strokeStyle = COLOR_GRID;
       ctx.lineWidth = 0.5;
       for (let x = 0; x <= COLS; x++) {
-        ctx.beginPath();
-        ctx.moveTo(x * GRID, 0);
-        ctx.lineTo(x * GRID, canvas.height);
-        ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(x * GRID, 0); ctx.lineTo(x * GRID, canvas.height); ctx.stroke();
       }
       for (let y = 0; y <= ROWS; y++) {
-        ctx.beginPath();
-        ctx.moveTo(0, y * GRID);
-        ctx.lineTo(canvas.width, y * GRID);
-        ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, y * GRID); ctx.lineTo(canvas.width, y * GRID); ctx.stroke();
       }
     }
 
     function drawCell(x, y, color, radius = 3) {
-      const px = x * GRID + 1;
-      const py = y * GRID + 1;
-      const size = GRID - 2;
       ctx.fillStyle = color;
       ctx.beginPath();
-      ctx.roundRect(px, py, size, size, radius);
+      ctx.roundRect(x * GRID + 1, y * GRID + 1, GRID - 2, GRID - 2, radius);
       ctx.fill();
     }
 
     function drawSnake() {
+      const skin = getSkin();
       snake.forEach((seg, i) => {
-        const color = i === 0 ? COLOR_HEAD : COLOR_BODY;
+        let color;
+        if (skin.id === 'rainbow') {
+          color = rainbowColor(i);
+        } else {
+          color = i === 0 ? skin.head : skin.body;
+        }
         drawCell(seg.x, seg.y, color, i === 0 ? 5 : 3);
       });
-      // Eyes on head
+
+      // Eyes
       const head = snake[0];
-      ctx.fillStyle = '#1a1a2e';
-      const eyeSize = 3;
+      const eyeColor = skin.eye || '#1a1a2e';
+      ctx.fillStyle = eyeColor;
       const ex = head.x * GRID + GRID / 2;
       const ey = head.y * GRID + GRID / 2;
       const offset = 4;
       if (dir.x !== 0) {
-        // moving horizontally
-        ctx.beginPath(); ctx.arc(ex + dir.x * 3, ey - offset, eyeSize, 0, Math.PI * 2); ctx.fill();
-        ctx.beginPath(); ctx.arc(ex + dir.x * 3, ey + offset, eyeSize, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(ex + dir.x * 3, ey - offset, 3, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(ex + dir.x * 3, ey + offset, 3, 0, Math.PI * 2); ctx.fill();
       } else {
-        ctx.beginPath(); ctx.arc(ex - offset, ey + dir.y * 3, eyeSize, 0, Math.PI * 2); ctx.fill();
-        ctx.beginPath(); ctx.arc(ex + offset, ey + dir.y * 3, eyeSize, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(ex - offset, ey + dir.y * 3, 3, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(ex + offset, ey + dir.y * 3, 3, 0, Math.PI * 2); ctx.fill();
       }
     }
 
     function drawFood() {
-      // Pulsing food
       drawCell(food.x, food.y, COLOR_FOOD, 8);
     }
 
     function drawBonus() {
       if (!bonus) return;
       drawCell(bonus.x, bonus.y, COLOR_BONUS, 8);
-      // Star symbol
       ctx.fillStyle = '#fff';
       ctx.font = 'bold 12px Arial';
       ctx.textAlign = 'center';
@@ -216,54 +455,49 @@
       drawSnake();
     }
 
+    // ─── Game loop ────────────────────────────────────────────────────────────
     function step() {
       dir = { ...nextDir };
       const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
 
-      // Wall collision
-      if (head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS) {
-        return gameOver();
-      }
-      // Self collision
-      if (snake.some(s => s.x === head.x && s.y === head.y)) {
-        return gameOver();
-      }
+      if (head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS) return gameOver();
+      if (snake.some(s => s.x === head.x && s.y === head.y)) return gameOver();
 
       snake.unshift(head);
 
       let ate = false;
+
       if (head.x === food.x && head.y === food.y) {
         score += 10 * level;
         ate = true;
         food = randomCell(snake);
-        // Bonus food every 5 apples
+        save.coins += level;  // earn coins per food eaten
         if (score % (50 * level) === 0 && !bonus) {
           bonus = randomCell([...snake, food]);
           setTimeout(() => { bonus = null; }, 5000);
         }
-        // Level up every 50 points
         const newLevel = Math.floor(score / 100) + 1;
         if (newLevel > level) {
           level = newLevel;
           speed = Math.max(60, 150 - (level - 1) * 15);
           restartLoop();
         }
+        if (score > save.highscore) {
+          save.highscore = score;
+        }
+        writeSave(save);
         updateUI();
       } else if (bonus && head.x === bonus.x && head.y === bonus.y) {
         score += 30 * level;
+        save.coins += 5 * level;
         bonus = null;
         ate = true;
+        if (score > save.highscore) save.highscore = score;
+        writeSave(save);
         updateUI();
       }
 
       if (!ate) snake.pop();
-
-      if (score > highscore) {
-        highscore = score;
-        localStorage.setItem('snake_hs', highscore);
-        updateUI();
-      }
-
       draw();
     }
 
@@ -271,10 +505,9 @@
       state = 'gameover';
       clearInterval(gameLoop);
       draw();
-      // Flash effect
       ctx.fillStyle = 'rgba(233, 69, 96, 0.25)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      setMessage(`Game over! Score: <strong>${score}</strong> &nbsp;|&nbsp; Druk <strong>Spatiebalk</strong> om opnieuw te spelen`);
+      setMessage(`Game over! Score: <strong>${score}</strong> &nbsp;|&nbsp; Munten verdiend: <strong>+${save.coins}</strong>`);
       document.getElementById('btn-start').textContent = 'Opnieuw';
     }
 
@@ -288,35 +521,156 @@
       init();
       draw();
       gameLoop = setInterval(step, speed);
-      setMessage('Gebruik <strong>pijltjestoetsen</strong> of <strong>WASD</strong> om te sturen');
+      setMessage('Stuur met <strong>pijltjestoetsen</strong>, <strong>WASD</strong> of <strong>swipe</strong>');
       document.getElementById('btn-start').textContent = 'Opnieuw';
     }
 
+    // ─── Keyboard ─────────────────────────────────────────────────────────────
+    const KEY_MAP = {
+      ArrowUp: {x:0,y:-1}, w:{x:0,y:-1}, W:{x:0,y:-1},
+      ArrowDown:{x:0,y:1}, s:{x:0,y:1}, S:{x:0,y:1},
+      ArrowLeft:{x:-1,y:0}, a:{x:-1,y:0}, A:{x:-1,y:0},
+      ArrowRight:{x:1,y:0}, d:{x:1,y:0}, D:{x:1,y:0},
+    };
+
     document.addEventListener('keydown', e => {
-      const keys = {
-        ArrowUp: { x: 0, y: -1 }, w: { x: 0, y: -1 }, W: { x: 0, y: -1 },
-        ArrowDown: { x: 0, y: 1 }, s: { x: 0, y: 1 }, S: { x: 0, y: 1 },
-        ArrowLeft: { x: -1, y: 0 }, a: { x: -1, y: 0 }, A: { x: -1, y: 0 },
-        ArrowRight: { x: 1, y: 0 }, d: { x: 1, y: 0 }, D: { x: 1, y: 0 },
-      };
-      if (keys[e.key]) {
+      if (KEY_MAP[e.key]) {
         e.preventDefault();
-        const nd = keys[e.key];
-        // Prevent 180-degree turns
+        const nd = KEY_MAP[e.key];
         if (nd.x !== -dir.x || nd.y !== -dir.y) nextDir = nd;
       }
-      if (e.code === 'Space') {
-        e.preventDefault();
-        startGame();
+      if (e.code === 'Space') { e.preventDefault(); startGame(); }
+    });
+
+    // ─── Touch swipe ──────────────────────────────────────────────────────────
+    let touchStart = null;
+
+    canvas.addEventListener('touchstart', e => {
+      e.preventDefault();
+      touchStart = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }, { passive: false });
+
+    canvas.addEventListener('touchend', e => {
+      if (!touchStart) return;
+      const dx = e.changedTouches[0].clientX - touchStart.x;
+      const dy = e.changedTouches[0].clientY - touchStart.y;
+      touchStart = null;
+      if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return; // tap = ignore
+
+      let nd;
+      if (Math.abs(dx) > Math.abs(dy)) {
+        nd = dx > 0 ? { x: 1, y: 0 } : { x: -1, y: 0 };
+      } else {
+        nd = dy > 0 ? { x: 0, y: 1 } : { x: 0, y: -1 };
+      }
+      if (state === 'playing' && (nd.x !== -dir.x || nd.y !== -dir.y)) nextDir = nd;
+    }, { passive: false });
+
+    // ─── D-pad buttons ────────────────────────────────────────────────────────
+    function dpadPress(nd) {
+      if (state !== 'playing') { startGame(); return; }
+      if (nd.x !== -dir.x || nd.y !== -dir.y) nextDir = nd;
+    }
+
+    document.getElementById('dpad-up').addEventListener('touchstart',    e => { e.preventDefault(); dpadPress({x:0,y:-1}); }, { passive:false });
+    document.getElementById('dpad-down').addEventListener('touchstart',   e => { e.preventDefault(); dpadPress({x:0,y:1});  }, { passive:false });
+    document.getElementById('dpad-left').addEventListener('touchstart',   e => { e.preventDefault(); dpadPress({x:-1,y:0}); }, { passive:false });
+    document.getElementById('dpad-right').addEventListener('touchstart',  e => { e.preventDefault(); dpadPress({x:1,y:0});  }, { passive:false });
+
+    // ─── Shop ─────────────────────────────────────────────────────────────────
+    function renderShop() {
+      document.getElementById('shop-coins').textContent = save.coins;
+      const grid = document.getElementById('skin-grid');
+      grid.innerHTML = '';
+
+      SKINS.forEach(skin => {
+        const owned    = save.owned.includes(skin.id);
+        const active   = save.skin === skin.id;
+        const card     = document.createElement('div');
+        card.className = 'skin-card' + (active ? ' selected' : '') + (!owned ? ' locked' : '');
+
+        // Preview strip
+        const preview = document.createElement('canvas');
+        preview.width  = 60;
+        preview.height = 20;
+        preview.style.cssText = 'border-radius:4px;display:block;';
+        const pc = preview.getContext('2d');
+        for (let i = 0; i < 3; i++) {
+          let c = skin.id === 'rainbow' ? rainbowColor(i) : (i === 0 ? skin.head : skin.body);
+          pc.fillStyle = c;
+          pc.beginPath();
+          pc.roundRect(i * 21, 1, 18, 18, i === 0 ? 5 : 3);
+          pc.fill();
+        }
+
+        const name  = document.createElement('div');
+        name.className = 'skin-name';
+        name.textContent = skin.name;
+
+        const badge = document.createElement('span');
+        badge.className = 'skin-badge';
+        if (active) {
+          badge.className += ' badge-active';
+          badge.textContent = 'Actief';
+        } else if (owned) {
+          badge.className += ' badge-owned';
+          badge.textContent = 'Gekocht';
+          card.addEventListener('click', () => selectSkin(skin.id));
+        } else {
+          badge.className += ' badge-buy';
+          badge.textContent = `🪙 ${skin.price}`;
+          card.addEventListener('click', () => buySkin(skin.id));
+        }
+
+        card.appendChild(preview);
+        card.appendChild(name);
+        card.appendChild(badge);
+        grid.appendChild(card);
+      });
+    }
+
+    function selectSkin(id) {
+      save.skin = id;
+      writeSave(save);
+      renderShop();
+    }
+
+    function buySkin(id) {
+      const skin = SKINS.find(s => s.id === id);
+      if (!skin || save.owned.includes(id)) return;
+      if (save.coins < skin.price) {
+        alert(`Niet genoeg munten! Je hebt ${save.coins} van de ${skin.price} benodigde munten.`);
+        return;
+      }
+      save.coins -= skin.price;
+      save.owned.push(id);
+      save.skin = id;
+      writeSave(save);
+      updateUI();
+      renderShop();
+    }
+
+    document.getElementById('btn-shop').addEventListener('click', () => {
+      renderShop();
+      document.getElementById('shop-overlay').classList.add('open');
+    });
+    document.getElementById('shop-close').addEventListener('click', () => {
+      document.getElementById('shop-overlay').classList.remove('open');
+    });
+    document.getElementById('shop-overlay').addEventListener('click', e => {
+      if (e.target === document.getElementById('shop-overlay')) {
+        document.getElementById('shop-overlay').classList.remove('open');
       }
     });
 
+    // ─── Start button ─────────────────────────────────────────────────────────
     document.getElementById('btn-start').addEventListener('click', startGame);
 
-    // Draw initial screen
+    // ─── Initial screen ───────────────────────────────────────────────────────
+    updateUI();
     drawGrid();
-    ctx.fillStyle = COLOR_HEAD;
-    ctx.font = 'bold 20px Courier New';
+    ctx.fillStyle = '#4ecca3';
+    ctx.font = 'bold 18px Courier New';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText('Druk Start om te beginnen', canvas.width / 2, canvas.height / 2);
