@@ -30,16 +30,14 @@
 
     #scoreboard {
       display: flex;
-      gap: 1.5rem;
+      gap: 1.4rem;
       margin-bottom: 8px;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: #a0a0c0;
       flex-wrap: wrap;
       justify-content: center;
     }
     #scoreboard span { color: #4ecca3; font-weight: bold; }
-
-    #coins-display { color: #f5a623; }
     #coins-display span { color: #f5a623; }
 
     canvas {
@@ -61,20 +59,21 @@
     }
     #message strong { color: #fff; }
 
-    /* Top button row */
     #btn-row {
       display: flex;
-      gap: 0.6rem;
+      gap: 0.5rem;
       margin-top: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     .btn {
-      padding: 0.5rem 1.2rem;
+      padding: 0.5rem 1.1rem;
       background: #4ecca3;
       color: #1a1a2e;
       border: none;
       border-radius: 4px;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-family: inherit;
       font-weight: bold;
       cursor: pointer;
@@ -82,9 +81,16 @@
       text-transform: uppercase;
       transition: background 0.15s;
     }
-    .btn:hover { background: #38b28a; }
+    .btn:hover  { background: #38b28a; }
     .btn:active { background: #2a9070; }
-    .btn:focus { outline: 2px solid #fff; }
+    .btn:focus  { outline: 2px solid #fff; }
+
+    #btn-pause {
+      background: #7a7aaa;
+      color: #fff;
+      display: none;
+    }
+    #btn-pause:hover { background: #5a5a8a; }
 
     #btn-shop {
       background: #f5a623;
@@ -92,7 +98,7 @@
     }
     #btn-shop:hover { background: #d4901e; }
 
-    /* D-pad touch controls */
+    /* ── D-pad ── */
     #dpad {
       display: none;
       margin-top: 14px;
@@ -101,13 +107,12 @@
       height: 150px;
       flex-shrink: 0;
     }
-
     .dpad-btn {
       position: absolute;
       width: 46px;
       height: 46px;
-      background: rgba(78, 204, 163, 0.18);
-      border: 2px solid rgba(78, 204, 163, 0.5);
+      background: rgba(78, 204, 163, 0.15);
+      border: 2px solid rgba(78, 204, 163, 0.45);
       border-radius: 8px;
       display: flex;
       align-items: center;
@@ -118,24 +123,20 @@
       -webkit-user-select: none;
       transition: background 0.1s;
     }
-    .dpad-btn:active, .dpad-btn.pressed {
-      background: rgba(78, 204, 163, 0.5);
-    }
+    .dpad-btn:active { background: rgba(78, 204, 163, 0.5); }
     #dpad-up    { top: 0;    left: 52px; }
     #dpad-down  { bottom: 0; left: 52px; }
     #dpad-left  { top: 52px; left: 0;   }
     #dpad-right { top: 52px; right: 0;  }
 
-    @media (pointer: coarse) {
-      #dpad { display: flex; }
-    }
+    @media (pointer: coarse) { #dpad { display: flex; } }
 
-    /* ===== SHOP MODAL ===== */
+    /* ── Shop modal ── */
     #shop-overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.75);
+      background: rgba(0,0,0,0.78);
       z-index: 100;
       align-items: center;
       justify-content: center;
@@ -147,11 +148,10 @@
       border: 2px solid #4ecca3;
       border-radius: 10px;
       padding: 20px;
-      width: min(440px, 96vw);
+      width: min(460px, 96vw);
       max-height: 90vh;
       overflow-y: auto;
     }
-
     #shop-modal h2 {
       color: #4ecca3;
       text-align: center;
@@ -164,13 +164,11 @@
       font-size: 0.9rem;
       margin-bottom: 14px;
     }
-
     #skin-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
       gap: 10px;
     }
-
     .skin-card {
       background: #1a2550;
       border: 2px solid #2a3570;
@@ -183,44 +181,21 @@
       cursor: pointer;
       transition: border-color 0.15s, background 0.15s;
     }
-    .skin-card:hover { border-color: #4ecca3; }
-    .skin-card.selected { border-color: #4ecca3; background: #1e3060; }
-    .skin-card.locked { opacity: 0.6; cursor: default; }
-    .skin-card.locked:hover { border-color: #2a3570; }
-
-    .skin-preview {
-      width: 60px;
-      height: 20px;
-      border-radius: 4px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .skin-name {
-      font-size: 0.75rem;
-      color: #ccc;
-      text-align: center;
-    }
-    .skin-price {
-      font-size: 0.7rem;
-      color: #f5a623;
-    }
+    .skin-card:hover         { border-color: #4ecca3; }
+    .skin-card.selected      { border-color: #4ecca3; background: #1e3060; }
+    .skin-card.locked        { opacity: 0.6; cursor: default; }
+    .skin-card.locked:hover  { border-color: #2a3570; }
+    .skin-name { font-size: 0.72rem; color: #ccc; text-align: center; }
     .skin-badge {
       font-size: 0.65rem;
-      padding: 2px 6px;
+      padding: 2px 7px;
       border-radius: 10px;
       font-weight: bold;
     }
     .badge-owned  { background: #2d9e7e; color: #fff; }
     .badge-active { background: #4ecca3; color: #1a1a2e; }
-    .badge-buy    { background: #f5a623; color: #1a1a2e; cursor: pointer; }
-    .badge-buy:hover { background: #d4901e; }
-
-    #shop-close {
-      display: block;
-      margin: 16px auto 0;
-      padding: 0.5rem 2rem;
-    }
+    .badge-buy    { background: #f5a623; color: #1a1a2e; }
+    #shop-close { display: block; margin: 16px auto 0; padding: 0.5rem 2rem; }
   </style>
 </head>
 <body>
@@ -239,10 +214,10 @@
 
   <div id="btn-row">
     <button class="btn" id="btn-start">Start</button>
+    <button class="btn" id="btn-pause">⏸ Pauze</button>
     <button class="btn" id="btn-shop">🏪 Shop</button>
   </div>
 
-  <!-- D-pad for touch -->
   <div id="dpad">
     <div class="dpad-btn" id="dpad-up">▲</div>
     <div class="dpad-btn" id="dpad-down">▼</div>
@@ -250,7 +225,6 @@
     <div class="dpad-btn" id="dpad-right">▶</div>
   </div>
 
-  <!-- Shop modal -->
   <div id="shop-overlay">
     <div id="shop-modal">
       <h2>🏪 Skin Shop</h2>
@@ -261,419 +235,554 @@
   </div>
 
   <script>
-    // ─── Canvas & constants ───────────────────────────────────────────────────
-    const canvas = document.getElementById('canvas');
-    const ctx    = canvas.getContext('2d');
+  // ─── Canvas ───────────────────────────────────────────────────────────────
+  const canvas = document.getElementById('canvas');
+  const ctx    = canvas.getContext('2d');
+  const GRID   = 20;
+  const COLS   = canvas.width  / GRID;
+  const ROWS   = canvas.height / GRID;
 
-    const GRID = 20;
-    const COLS = canvas.width  / GRID;
-    const ROWS = canvas.height / GRID;
+  const COLOR_BG    = '#16213e';
+  const COLOR_GRID  = '#1a2550';
+  const COLOR_FOOD  = '#e94560';
+  const COLOR_BONUS = '#f5a623';
 
-    const COLOR_BG    = '#16213e';
-    const COLOR_GRID  = '#1a2550';
-    const COLOR_FOOD  = '#e94560';
-    const COLOR_BONUS = '#f5a623';
+  // ─── Audio (Web Audio API, synthesised – no files needed) ─────────────────
+  let audioCtx = null;
 
-    // ─── Skin definitions ────────────────────────────────────────────────────
-    const SKINS = [
-      {
-        id: 'classic',
-        name: 'Klassiek',
-        price: 0,
-        head: '#4ecca3',
-        body: '#2d9e7e',
-        eye: '#1a1a2e',
-      },
-      {
-        id: 'fire',
-        name: 'Vuur',
-        price: 80,
-        head: '#ff4500',
-        body: '#cc2200',
-        eye: '#ffff00',
-      },
-      {
-        id: 'ocean',
-        name: 'Oceaan',
-        price: 80,
-        head: '#00bfff',
-        body: '#0077cc',
-        eye: '#fff',
-      },
-      {
-        id: 'gold',
-        name: 'Goud',
-        price: 150,
-        head: '#ffd700',
-        body: '#b8960c',
-        eye: '#1a1a2e',
-      },
-      {
-        id: 'galaxy',
-        name: 'Galaxy',
-        price: 200,
-        head: '#9b59b6',
-        body: '#6c3483',
-        eye: '#4ecca3',
-      },
-      {
-        id: 'rainbow',
-        name: 'Regenboog',
-        price: 300,
-        head: null,   // special: animated per segment
-        body: null,
-        eye: '#fff',
-      },
-    ];
-
-    // ─── Persistent state ─────────────────────────────────────────────────────
-    function loadSave() {
-      try { return JSON.parse(localStorage.getItem('snake_save') || '{}'); } catch { return {}; }
+  function getAudio() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     }
-    function writeSave(data) {
-      localStorage.setItem('snake_save', JSON.stringify(data));
+    // Resume if browser suspended it
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  }
+
+  function playTone(freq, type, duration, gain, delay = 0) {
+    try {
+      const ac  = getAudio();
+      const osc = ac.createOscillator();
+      const vol = ac.createGain();
+      osc.connect(vol);
+      vol.connect(ac.destination);
+      osc.type = type;
+      osc.frequency.value = freq;
+      const t = ac.currentTime + delay;
+      vol.gain.setValueAtTime(0.001, t);
+      vol.gain.linearRampToValueAtTime(gain, t + 0.01);
+      vol.gain.exponentialRampToValueAtTime(0.001, t + duration);
+      osc.start(t);
+      osc.stop(t + duration + 0.02);
+    } catch (_) {}
+  }
+
+  function soundEat() {
+    playTone(523, 'square', 0.07, 0.18);
+    playTone(784, 'square', 0.07, 0.14, 0.06);
+  }
+
+  function soundBonus() {
+    [523, 659, 784, 1047].forEach((f, i) =>
+      playTone(f, 'sine', 0.11, 0.22, i * 0.07));
+  }
+
+  function soundLevelUp() {
+    [330, 415, 494, 659, 830].forEach((f, i) =>
+      playTone(f, 'sine', 0.13, 0.2, i * 0.09));
+  }
+
+  function soundGameOver() {
+    [330, 277, 220, 185, 147].forEach((f, i) =>
+      playTone(f, 'sawtooth', 0.18, 0.28, i * 0.11));
+  }
+
+  // ─── Skin definitions ─────────────────────────────────────────────────────
+  const RAINBOW = ['#ff4444','#ff9900','#ffee00','#44cc44','#4499ff','#9944ff'];
+
+  const SKINS = [
+    { id: 'classic', name: 'Klassiek',   price: 0,   head: '#4ecca3', body: '#2d9e7e', eye: '#1a1a2e' },
+    { id: 'fire',    name: 'Vuur',       price: 80,  head: '#ff4500', body: '#cc2200', eye: '#ffee00' },
+    { id: 'ocean',   name: 'Oceaan',     price: 80,  head: '#00bfff', body: '#0077cc', eye: '#ffffff' },
+    { id: 'gold',    name: 'Goud',       price: 150, head: '#ffd700', body: '#b8960c', eye: '#1a1a2e' },
+    { id: 'galaxy',  name: 'Galaxy',     price: 200, head: '#9b59b6', body: '#6c3483', eye: '#4ecca3' },
+    { id: 'ibis',    name: 'Ibis Vogel', price: 250, head: '#ff6eb4', body: '#d63a8a', eye: '#ffffff', beak: true },
+    { id: 'rainbow', name: 'Regenboog',  price: 300, head: null,      body: null,      eye: '#ffffff' },
+  ];
+
+  // ─── Persistent save ──────────────────────────────────────────────────────
+  function loadSave() {
+    try { return JSON.parse(localStorage.getItem('snake_save') || '{}'); } catch { return {}; }
+  }
+  function writeSave(data) { localStorage.setItem('snake_save', JSON.stringify(data)); }
+
+  let save = loadSave();
+  if (!save.highscore) save.highscore = parseInt(localStorage.getItem('snake_hs') || '0');
+  if (!save.coins)     save.coins     = 0;
+  if (!save.owned)     save.owned     = ['classic'];
+  if (!save.skin)      save.skin      = 'classic';
+  writeSave(save);
+
+  // ─── Game state ───────────────────────────────────────────────────────────
+  let snake, prevSnake, dir, nextDir, food, bonus;
+  let score, level, speed, state, paused;
+  let stepInterval = null;
+  let rafId        = null;
+  let lastStepTime = 0;
+
+  function getSkin() { return SKINS.find(s => s.id === save.skin) || SKINS[0]; }
+
+  function randomCell(exclude = []) {
+    let c;
+    do { c = { x: Math.floor(Math.random() * COLS), y: Math.floor(Math.random() * ROWS) }; }
+    while (exclude.some(e => e.x === c.x && e.y === c.y));
+    return c;
+  }
+
+  function init() {
+    snake    = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
+    prevSnake = snake.map(s => ({ ...s }));
+    dir      = { x: 1, y: 0 };
+    nextDir  = { x: 1, y: 0 };
+    food     = randomCell(snake);
+    bonus    = null;
+    score    = 0;
+    level    = 1;
+    speed    = 150;
+    state    = 'playing';
+    paused   = false;
+    updateUI();
+    updatePauseBtn();
+  }
+
+  function updateUI() {
+    document.getElementById('score').textContent      = score;
+    document.getElementById('level').textContent      = level;
+    document.getElementById('highscore').textContent  = save.highscore;
+    document.getElementById('coins').textContent      = save.coins;
+    document.getElementById('shop-coins').textContent = save.coins;
+  }
+
+  function setMessage(msg) { document.getElementById('message').innerHTML = msg; }
+
+  function updatePauseBtn() {
+    const btn = document.getElementById('btn-pause');
+    if (state !== 'playing') { btn.style.display = 'none'; return; }
+    btn.style.display = '';
+    btn.textContent = paused ? '▶ Verder' : '⏸ Pauze';
+  }
+
+  // ─── Drawing helpers ──────────────────────────────────────────────────────
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  function drawGrid() {
+    ctx.fillStyle = COLOR_BG;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = COLOR_GRID;
+    ctx.lineWidth = 0.5;
+    for (let x = 0; x <= COLS; x++) {
+      ctx.beginPath(); ctx.moveTo(x * GRID, 0); ctx.lineTo(x * GRID, canvas.height); ctx.stroke();
     }
-
-    let save = loadSave();
-    if (!save.highscore) save.highscore = parseInt(localStorage.getItem('snake_hs') || '0');
-    if (!save.coins)     save.coins = 0;
-    if (!save.owned)     save.owned = ['classic'];
-    if (!save.skin)      save.skin  = 'classic';
-    writeSave(save);
-
-    // ─── Game state ───────────────────────────────────────────────────────────
-    let snake, dir, nextDir, food, bonus, score, level, speed, gameLoop, state;
-
-    function getSkin() { return SKINS.find(s => s.id === save.skin) || SKINS[0]; }
-
-    function randomCell(exclude = []) {
-      let cell;
-      do {
-        cell = { x: Math.floor(Math.random() * COLS), y: Math.floor(Math.random() * ROWS) };
-      } while (exclude.some(e => e.x === cell.x && e.y === cell.y));
-      return cell;
+    for (let y = 0; y <= ROWS; y++) {
+      ctx.beginPath(); ctx.moveTo(0, y * GRID); ctx.lineTo(canvas.width, y * GRID); ctx.stroke();
     }
+  }
 
-    function init() {
-      snake   = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
-      dir     = { x: 1, y: 0 };
-      nextDir = { x: 1, y: 0 };
-      food    = randomCell(snake);
-      bonus   = null;
-      score   = 0;
-      level   = 1;
-      speed   = 150;
-      state   = 'playing';
+  // Draw a rounded square at pixel position (px, py)
+  function drawCellPx(px, py, color, radius = 3) {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.roundRect(px + 1, py + 1, GRID - 2, GRID - 2, radius);
+    ctx.fill();
+  }
+
+  // Draw ibis beak as an orange pointed triangle from the head edge
+  function drawIbisBeak(cx, cy) {
+    const bLen = 10, bW = 3;
+    ctx.fillStyle = '#ff8c00';
+    ctx.beginPath();
+    if (dir.x === 1) {                              // →
+      ctx.moveTo(cx + GRID / 2,       cy - bW);
+      ctx.lineTo(cx + GRID / 2 + bLen, cy);
+      ctx.lineTo(cx + GRID / 2,       cy + bW);
+    } else if (dir.x === -1) {                      // ←
+      ctx.moveTo(cx - GRID / 2,        cy - bW);
+      ctx.lineTo(cx - GRID / 2 - bLen,  cy);
+      ctx.lineTo(cx - GRID / 2,        cy + bW);
+    } else if (dir.y === -1) {                      // ↑
+      ctx.moveTo(cx - bW, cy - GRID / 2);
+      ctx.lineTo(cx,      cy - GRID / 2 - bLen);
+      ctx.lineTo(cx + bW, cy - GRID / 2);
+    } else {                                        // ↓
+      ctx.moveTo(cx - bW, cy + GRID / 2);
+      ctx.lineTo(cx,      cy + GRID / 2 + bLen);
+      ctx.lineTo(cx + bW, cy + GRID / 2);
+    }
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  // Draw food as a pulsing circle
+  function drawFood(ts = 0) {
+    const scale = 1 + 0.12 * Math.sin(ts / 480 * Math.PI * 2);
+    const cx = food.x * GRID + GRID / 2;
+    const cy = food.y * GRID + GRID / 2;
+    ctx.fillStyle = COLOR_FOOD;
+    ctx.beginPath();
+    ctx.arc(cx, cy, (GRID / 2 - 2) * scale, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // Draw bonus star as a pulsing circle + ★
+  function drawBonus(ts = 0) {
+    if (!bonus) return;
+    const scale = 1 + 0.18 * Math.sin(ts / 280 * Math.PI * 2);
+    const cx = bonus.x * GRID + GRID / 2;
+    const cy = bonus.y * GRID + GRID / 2;
+    ctx.fillStyle = COLOR_BONUS;
+    ctx.beginPath();
+    ctx.arc(cx, cy, (GRID / 2 - 2) * scale, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 12px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('★', cx, cy);
+  }
+
+  // Smooth-interpolated snake draw (t = 0..1 between logical steps)
+  function drawSnakeSmooth(t) {
+    const skin = getSkin();
+    snake.forEach((seg, i) => {
+      const prev = prevSnake[i] || seg;          // new tail segment → no motion
+      const px   = lerp(prev.x, seg.x, t) * GRID;
+      const py   = lerp(prev.y, seg.y, t) * GRID;
+
+      let color;
+      if (skin.id === 'rainbow') color = RAINBOW[i % RAINBOW.length];
+      else                        color = i === 0 ? skin.head : skin.body;
+
+      drawCellPx(px, py, color, i === 0 ? 5 : 3);
+    });
+
+    // Head centre (interpolated)
+    const ph = prevSnake[0] || snake[0];
+    const cx = lerp(ph.x, snake[0].x, t) * GRID + GRID / 2;
+    const cy = lerp(ph.y, snake[0].y, t) * GRID + GRID / 2;
+
+    // Ibis beak (drawn on top of head, under eyes)
+    if (getSkin().beak) drawIbisBeak(cx, cy);
+
+    // Eyes
+    ctx.fillStyle = skin.eye || '#1a1a2e';
+    const off = 4;
+    if (dir.x !== 0) {
+      ctx.beginPath(); ctx.arc(cx + dir.x * 3, cy - off, 3, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(cx + dir.x * 3, cy + off, 3, 0, Math.PI * 2); ctx.fill();
+    } else {
+      ctx.beginPath(); ctx.arc(cx - off, cy + dir.y * 3, 3, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(cx + off, cy + dir.y * 3, 3, 0, Math.PI * 2); ctx.fill();
+    }
+  }
+
+  function drawPauseOverlay() {
+    ctx.fillStyle = 'rgba(22, 33, 62, 0.78)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#4ecca3';
+    ctx.font = 'bold 26px Courier New';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('⏸  GEPAUZEERD', canvas.width / 2, canvas.height / 2);
+    ctx.font = '14px Courier New';
+    ctx.fillStyle = '#a0a0c0';
+    ctx.fillText('Spatiebalk of ▶ Verder om door te gaan', canvas.width / 2, canvas.height / 2 + 34);
+  }
+
+  // ─── requestAnimationFrame render loop ───────────────────────────────────
+  function renderLoop(ts) {
+    if (state === 'playing') {
+      const t = paused ? 1 : Math.min(1, (ts - lastStepTime) / speed);
+      drawGrid();
+      drawFood(ts);
+      drawBonus(ts);
+      drawSnakeSmooth(t);
+      if (paused) drawPauseOverlay();
+    }
+    rafId = requestAnimationFrame(renderLoop);
+  }
+
+  // ─── Game step (logical, runs every `speed` ms) ───────────────────────────
+  function step() {
+    if (paused) return;
+
+    // Snapshot positions before moving (for smooth interpolation)
+    prevSnake    = snake.map(s => ({ ...s }));
+    lastStepTime = performance.now();
+
+    dir = { ...nextDir };
+    const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+
+    if (head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS) return gameOver();
+    if (snake.some(s => s.x === head.x && s.y === head.y))             return gameOver();
+
+    snake.unshift(head);
+    let ate = false;
+
+    if (head.x === food.x && head.y === food.y) {
+      score      += 10 * level;
+      save.coins += level;
+      ate         = true;
+      food        = randomCell(snake);
+      soundEat();
+
+      // Spawn bonus every 50·level points (once)
+      if (score % (50 * level) === 0 && !bonus) {
+        bonus = randomCell([...snake, food]);
+        setTimeout(() => { bonus = null; }, 5000);
+      }
+
+      // Level-up
+      const newLevel = Math.floor(score / 100) + 1;
+      if (newLevel > level) {
+        level = newLevel;
+        speed = Math.max(60, 150 - (level - 1) * 15);
+        soundLevelUp();
+        restartInterval();
+      }
+
+      if (score > save.highscore) save.highscore = score;
+      writeSave(save);
+      updateUI();
+
+    } else if (bonus && head.x === bonus.x && head.y === bonus.y) {
+      score      += 30 * level;
+      save.coins += 5 * level;
+      bonus       = null;
+      ate         = true;
+      soundBonus();
+      if (score > save.highscore) save.highscore = score;
+      writeSave(save);
       updateUI();
     }
 
-    function updateUI() {
-      document.getElementById('score').textContent     = score;
-      document.getElementById('level').textContent     = level;
-      document.getElementById('highscore').textContent = save.highscore;
-      document.getElementById('coins').textContent     = save.coins;
-      document.getElementById('shop-coins').textContent = save.coins;
-    }
+    if (!ate) snake.pop();
+  }
 
-    function setMessage(msg) {
-      document.getElementById('message').innerHTML = msg;
-    }
+  function gameOver() {
+    state = 'gameover';
+    clearInterval(stepInterval);
+    cancelAnimationFrame(rafId);
+    rafId = null;
+    soundGameOver();
 
-    // ─── Drawing ──────────────────────────────────────────────────────────────
-    const RAINBOW = ['#ff4444','#ff9900','#ffee00','#44cc44','#4499ff','#9944ff'];
+    // Final static draw
+    drawGrid();
+    drawFood();
+    drawBonus();
+    drawSnakeSmooth(1);
+    ctx.fillStyle = 'rgba(233, 69, 96, 0.28)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    function rainbowColor(index) {
-      return RAINBOW[index % RAINBOW.length];
-    }
+    setMessage(`Game over! Score: <strong>${score}</strong> &nbsp;|&nbsp; Munten gespaard: <strong>🪙 ${save.coins}</strong>`);
+    document.getElementById('btn-start').textContent = 'Opnieuw';
+    updatePauseBtn();
+  }
 
-    function drawGrid() {
-      ctx.fillStyle = COLOR_BG;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.strokeStyle = COLOR_GRID;
-      ctx.lineWidth = 0.5;
-      for (let x = 0; x <= COLS; x++) {
-        ctx.beginPath(); ctx.moveTo(x * GRID, 0); ctx.lineTo(x * GRID, canvas.height); ctx.stroke();
-      }
-      for (let y = 0; y <= ROWS; y++) {
-        ctx.beginPath(); ctx.moveTo(0, y * GRID); ctx.lineTo(canvas.width, y * GRID); ctx.stroke();
-      }
-    }
+  function restartInterval() {
+    clearInterval(stepInterval);
+    stepInterval = setInterval(step, speed);
+  }
 
-    function drawCell(x, y, color, radius = 3) {
-      ctx.fillStyle = color;
-      ctx.beginPath();
-      ctx.roundRect(x * GRID + 1, y * GRID + 1, GRID - 2, GRID - 2, radius);
-      ctx.fill();
-    }
+  function startGame() {
+    clearInterval(stepInterval);
+    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+    init();
+    lastStepTime = performance.now();
+    stepInterval = setInterval(step, speed);
+    rafId        = requestAnimationFrame(renderLoop);
+    setMessage('Stuur met <strong>pijltjestoetsen</strong>, <strong>WASD</strong> of <strong>swipe</strong>');
+    document.getElementById('btn-start').textContent = 'Opnieuw';
+  }
 
-    function drawSnake() {
-      const skin = getSkin();
-      snake.forEach((seg, i) => {
-        let color;
-        if (skin.id === 'rainbow') {
-          color = rainbowColor(i);
-        } else {
-          color = i === 0 ? skin.head : skin.body;
-        }
-        drawCell(seg.x, seg.y, color, i === 0 ? 5 : 3);
-      });
+  function togglePause() {
+    if (state !== 'playing') return;
+    paused = !paused;
+    if (!paused) lastStepTime = performance.now(); // prevent skipped frame on resume
+    updatePauseBtn();
+  }
 
-      // Eyes
-      const head = snake[0];
-      const eyeColor = skin.eye || '#1a1a2e';
-      ctx.fillStyle = eyeColor;
-      const ex = head.x * GRID + GRID / 2;
-      const ey = head.y * GRID + GRID / 2;
-      const offset = 4;
-      if (dir.x !== 0) {
-        ctx.beginPath(); ctx.arc(ex + dir.x * 3, ey - offset, 3, 0, Math.PI * 2); ctx.fill();
-        ctx.beginPath(); ctx.arc(ex + dir.x * 3, ey + offset, 3, 0, Math.PI * 2); ctx.fill();
-      } else {
-        ctx.beginPath(); ctx.arc(ex - offset, ey + dir.y * 3, 3, 0, Math.PI * 2); ctx.fill();
-        ctx.beginPath(); ctx.arc(ex + offset, ey + dir.y * 3, 3, 0, Math.PI * 2); ctx.fill();
-      }
-    }
+  // ─── Keyboard ─────────────────────────────────────────────────────────────
+  const KEY_MAP = {
+    ArrowUp: {x:0,y:-1}, w:{x:0,y:-1}, W:{x:0,y:-1},
+    ArrowDown:{x:0,y:1}, s:{x:0,y:1}, S:{x:0,y:1},
+    ArrowLeft:{x:-1,y:0}, a:{x:-1,y:0}, A:{x:-1,y:0},
+    ArrowRight:{x:1,y:0}, d:{x:1,y:0}, D:{x:1,y:0},
+  };
 
-    function drawFood() {
-      drawCell(food.x, food.y, COLOR_FOOD, 8);
-    }
-
-    function drawBonus() {
-      if (!bonus) return;
-      drawCell(bonus.x, bonus.y, COLOR_BONUS, 8);
-      ctx.fillStyle = '#fff';
-      ctx.font = 'bold 12px Arial';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('★', bonus.x * GRID + GRID / 2, bonus.y * GRID + GRID / 2);
-    }
-
-    function draw() {
-      drawGrid();
-      drawFood();
-      drawBonus();
-      drawSnake();
-    }
-
-    // ─── Game loop ────────────────────────────────────────────────────────────
-    function step() {
-      dir = { ...nextDir };
-      const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
-
-      if (head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS) return gameOver();
-      if (snake.some(s => s.x === head.x && s.y === head.y)) return gameOver();
-
-      snake.unshift(head);
-
-      let ate = false;
-
-      if (head.x === food.x && head.y === food.y) {
-        score += 10 * level;
-        ate = true;
-        food = randomCell(snake);
-        save.coins += level;  // earn coins per food eaten
-        if (score % (50 * level) === 0 && !bonus) {
-          bonus = randomCell([...snake, food]);
-          setTimeout(() => { bonus = null; }, 5000);
-        }
-        const newLevel = Math.floor(score / 100) + 1;
-        if (newLevel > level) {
-          level = newLevel;
-          speed = Math.max(60, 150 - (level - 1) * 15);
-          restartLoop();
-        }
-        if (score > save.highscore) {
-          save.highscore = score;
-        }
-        writeSave(save);
-        updateUI();
-      } else if (bonus && head.x === bonus.x && head.y === bonus.y) {
-        score += 30 * level;
-        save.coins += 5 * level;
-        bonus = null;
-        ate = true;
-        if (score > save.highscore) save.highscore = score;
-        writeSave(save);
-        updateUI();
-      }
-
-      if (!ate) snake.pop();
-      draw();
-    }
-
-    function gameOver() {
-      state = 'gameover';
-      clearInterval(gameLoop);
-      draw();
-      ctx.fillStyle = 'rgba(233, 69, 96, 0.25)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      setMessage(`Game over! Score: <strong>${score}</strong> &nbsp;|&nbsp; Munten verdiend: <strong>+${save.coins}</strong>`);
-      document.getElementById('btn-start').textContent = 'Opnieuw';
-    }
-
-    function restartLoop() {
-      clearInterval(gameLoop);
-      gameLoop = setInterval(step, speed);
-    }
-
-    function startGame() {
-      clearInterval(gameLoop);
-      init();
-      draw();
-      gameLoop = setInterval(step, speed);
-      setMessage('Stuur met <strong>pijltjestoetsen</strong>, <strong>WASD</strong> of <strong>swipe</strong>');
-      document.getElementById('btn-start').textContent = 'Opnieuw';
-    }
-
-    // ─── Keyboard ─────────────────────────────────────────────────────────────
-    const KEY_MAP = {
-      ArrowUp: {x:0,y:-1}, w:{x:0,y:-1}, W:{x:0,y:-1},
-      ArrowDown:{x:0,y:1}, s:{x:0,y:1}, S:{x:0,y:1},
-      ArrowLeft:{x:-1,y:0}, a:{x:-1,y:0}, A:{x:-1,y:0},
-      ArrowRight:{x:1,y:0}, d:{x:1,y:0}, D:{x:1,y:0},
-    };
-
-    document.addEventListener('keydown', e => {
-      if (KEY_MAP[e.key]) {
-        e.preventDefault();
+  document.addEventListener('keydown', e => {
+    if (KEY_MAP[e.key]) {
+      e.preventDefault();
+      if (state === 'playing' && !paused) {
         const nd = KEY_MAP[e.key];
         if (nd.x !== -dir.x || nd.y !== -dir.y) nextDir = nd;
       }
-      if (e.code === 'Space') { e.preventDefault(); startGame(); }
-    });
-
-    // ─── Touch swipe ──────────────────────────────────────────────────────────
-    let touchStart = null;
-
-    canvas.addEventListener('touchstart', e => {
+      return;
+    }
+    if (e.code === 'Space') {
       e.preventDefault();
-      touchStart = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-    }, { passive: false });
+      if (state === 'playing') togglePause();
+      else startGame();
+    }
+  });
 
-    canvas.addEventListener('touchend', e => {
-      if (!touchStart) return;
-      const dx = e.changedTouches[0].clientX - touchStart.x;
-      const dy = e.changedTouches[0].clientY - touchStart.y;
-      touchStart = null;
-      if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return; // tap = ignore
+  // ─── Touch swipe on canvas ─────────────────────────────────────────────────
+  let touchStart = null;
 
-      let nd;
-      if (Math.abs(dx) > Math.abs(dy)) {
-        nd = dx > 0 ? { x: 1, y: 0 } : { x: -1, y: 0 };
+  canvas.addEventListener('touchstart', e => {
+    e.preventDefault();
+    touchStart = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  }, { passive: false });
+
+  canvas.addEventListener('touchend', e => {
+    if (!touchStart) return;
+    const dx = e.changedTouches[0].clientX - touchStart.x;
+    const dy = e.changedTouches[0].clientY - touchStart.y;
+    touchStart = null;
+    if (Math.abs(dx) < 15 && Math.abs(dy) < 15) return;   // tap → ignore
+
+    let nd;
+    if (Math.abs(dx) > Math.abs(dy)) nd = dx > 0 ? {x:1,y:0} : {x:-1,y:0};
+    else                              nd = dy > 0 ? {x:0,y:1} : {x:0,y:-1};
+
+    if (state !== 'playing') { startGame(); return; }
+    if (paused)               { togglePause(); return; }
+    if (nd.x !== -dir.x || nd.y !== -dir.y) nextDir = nd;
+  }, { passive: false });
+
+  // ─── D-pad ────────────────────────────────────────────────────────────────
+  function dpadPress(nd) {
+    if (state !== 'playing') { startGame(); return; }
+    if (paused)               { togglePause(); return; }
+    if (nd.x !== -dir.x || nd.y !== -dir.y) nextDir = nd;
+  }
+
+  document.getElementById('dpad-up').addEventListener('touchstart',
+    e => { e.preventDefault(); dpadPress({x:0,y:-1}); }, { passive: false });
+  document.getElementById('dpad-down').addEventListener('touchstart',
+    e => { e.preventDefault(); dpadPress({x:0,y:1});  }, { passive: false });
+  document.getElementById('dpad-left').addEventListener('touchstart',
+    e => { e.preventDefault(); dpadPress({x:-1,y:0}); }, { passive: false });
+  document.getElementById('dpad-right').addEventListener('touchstart',
+    e => { e.preventDefault(); dpadPress({x:1,y:0});  }, { passive: false });
+
+  // ─── Shop ─────────────────────────────────────────────────────────────────
+  function renderShop() {
+    document.getElementById('shop-coins').textContent = save.coins;
+    const grid = document.getElementById('skin-grid');
+    grid.innerHTML = '';
+
+    SKINS.forEach(skin => {
+      const owned  = save.owned.includes(skin.id);
+      const active = save.skin === skin.id;
+
+      const card = document.createElement('div');
+      card.className = 'skin-card' + (active ? ' selected' : '') + (!owned ? ' locked' : '');
+
+      // Mini canvas preview
+      const prev = document.createElement('canvas');
+      prev.width  = 62;
+      prev.height = 22;
+      prev.style.cssText = 'border-radius:4px;display:block;background:#0d1830';
+      const pc = prev.getContext('2d');
+      for (let i = 0; i < 3; i++) {
+        let c;
+        if (skin.id === 'rainbow')   c = RAINBOW[i % RAINBOW.length];
+        else                          c = i === 0 ? skin.head : skin.body;
+        pc.fillStyle = c;
+        pc.beginPath();
+        pc.roundRect(i * 21 + 1, 2, 18, 18, i === 0 ? 5 : 3);
+        pc.fill();
+      }
+      // Ibis beak preview
+      if (skin.beak) {
+        pc.fillStyle = '#ff8c00';
+        pc.beginPath();
+        pc.moveTo(62, 9); pc.lineTo(62 + 7, 11); pc.lineTo(62, 13);
+        pc.closePath(); pc.fill();
+      }
+
+      const name = document.createElement('div');
+      name.className   = 'skin-name';
+      name.textContent = skin.name;
+
+      const badge = document.createElement('span');
+      badge.className = 'skin-badge';
+      if (active) {
+        badge.className  += ' badge-active';
+        badge.textContent = 'Actief';
+      } else if (owned) {
+        badge.className  += ' badge-owned';
+        badge.textContent = 'Gekocht';
+        card.addEventListener('click', () => selectSkin(skin.id));
       } else {
-        nd = dy > 0 ? { x: 0, y: 1 } : { x: 0, y: -1 };
+        badge.className  += ' badge-buy';
+        badge.textContent = `🪙 ${skin.price}`;
+        card.addEventListener('click', () => buySkin(skin.id));
       }
-      if (state === 'playing' && (nd.x !== -dir.x || nd.y !== -dir.y)) nextDir = nd;
-    }, { passive: false });
 
-    // ─── D-pad buttons ────────────────────────────────────────────────────────
-    function dpadPress(nd) {
-      if (state !== 'playing') { startGame(); return; }
-      if (nd.x !== -dir.x || nd.y !== -dir.y) nextDir = nd;
-    }
-
-    document.getElementById('dpad-up').addEventListener('touchstart',    e => { e.preventDefault(); dpadPress({x:0,y:-1}); }, { passive:false });
-    document.getElementById('dpad-down').addEventListener('touchstart',   e => { e.preventDefault(); dpadPress({x:0,y:1});  }, { passive:false });
-    document.getElementById('dpad-left').addEventListener('touchstart',   e => { e.preventDefault(); dpadPress({x:-1,y:0}); }, { passive:false });
-    document.getElementById('dpad-right').addEventListener('touchstart',  e => { e.preventDefault(); dpadPress({x:1,y:0});  }, { passive:false });
-
-    // ─── Shop ─────────────────────────────────────────────────────────────────
-    function renderShop() {
-      document.getElementById('shop-coins').textContent = save.coins;
-      const grid = document.getElementById('skin-grid');
-      grid.innerHTML = '';
-
-      SKINS.forEach(skin => {
-        const owned    = save.owned.includes(skin.id);
-        const active   = save.skin === skin.id;
-        const card     = document.createElement('div');
-        card.className = 'skin-card' + (active ? ' selected' : '') + (!owned ? ' locked' : '');
-
-        // Preview strip
-        const preview = document.createElement('canvas');
-        preview.width  = 60;
-        preview.height = 20;
-        preview.style.cssText = 'border-radius:4px;display:block;';
-        const pc = preview.getContext('2d');
-        for (let i = 0; i < 3; i++) {
-          let c = skin.id === 'rainbow' ? rainbowColor(i) : (i === 0 ? skin.head : skin.body);
-          pc.fillStyle = c;
-          pc.beginPath();
-          pc.roundRect(i * 21, 1, 18, 18, i === 0 ? 5 : 3);
-          pc.fill();
-        }
-
-        const name  = document.createElement('div');
-        name.className = 'skin-name';
-        name.textContent = skin.name;
-
-        const badge = document.createElement('span');
-        badge.className = 'skin-badge';
-        if (active) {
-          badge.className += ' badge-active';
-          badge.textContent = 'Actief';
-        } else if (owned) {
-          badge.className += ' badge-owned';
-          badge.textContent = 'Gekocht';
-          card.addEventListener('click', () => selectSkin(skin.id));
-        } else {
-          badge.className += ' badge-buy';
-          badge.textContent = `🪙 ${skin.price}`;
-          card.addEventListener('click', () => buySkin(skin.id));
-        }
-
-        card.appendChild(preview);
-        card.appendChild(name);
-        card.appendChild(badge);
-        grid.appendChild(card);
-      });
-    }
-
-    function selectSkin(id) {
-      save.skin = id;
-      writeSave(save);
-      renderShop();
-    }
-
-    function buySkin(id) {
-      const skin = SKINS.find(s => s.id === id);
-      if (!skin || save.owned.includes(id)) return;
-      if (save.coins < skin.price) {
-        alert(`Niet genoeg munten! Je hebt ${save.coins} van de ${skin.price} benodigde munten.`);
-        return;
-      }
-      save.coins -= skin.price;
-      save.owned.push(id);
-      save.skin = id;
-      writeSave(save);
-      updateUI();
-      renderShop();
-    }
-
-    document.getElementById('btn-shop').addEventListener('click', () => {
-      renderShop();
-      document.getElementById('shop-overlay').classList.add('open');
+      card.appendChild(prev);
+      card.appendChild(name);
+      card.appendChild(badge);
+      grid.appendChild(card);
     });
-    document.getElementById('shop-close').addEventListener('click', () => {
-      document.getElementById('shop-overlay').classList.remove('open');
-    });
-    document.getElementById('shop-overlay').addEventListener('click', e => {
-      if (e.target === document.getElementById('shop-overlay')) {
-        document.getElementById('shop-overlay').classList.remove('open');
-      }
-    });
+  }
 
-    // ─── Start button ─────────────────────────────────────────────────────────
-    document.getElementById('btn-start').addEventListener('click', startGame);
+  function selectSkin(id) {
+    save.skin = id;
+    writeSave(save);
+    renderShop();
+  }
 
-    // ─── Initial screen ───────────────────────────────────────────────────────
+  function buySkin(id) {
+    const skin = SKINS.find(s => s.id === id);
+    if (!skin || save.owned.includes(id)) return;
+    if (save.coins < skin.price) {
+      alert(`Niet genoeg munten!\nJe hebt ${save.coins} 🪙 van de ${skin.price} benodigde munten.`);
+      return;
+    }
+    save.coins -= skin.price;
+    save.owned.push(id);
+    save.skin = id;
+    writeSave(save);
     updateUI();
-    drawGrid();
-    ctx.fillStyle = '#4ecca3';
-    ctx.font = 'bold 18px Courier New';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('Druk Start om te beginnen', canvas.width / 2, canvas.height / 2);
+    renderShop();
+  }
+
+  document.getElementById('btn-shop').addEventListener('click', () => {
+    renderShop();
+    document.getElementById('shop-overlay').classList.add('open');
+  });
+  document.getElementById('shop-close').addEventListener('click', () => {
+    document.getElementById('shop-overlay').classList.remove('open');
+  });
+  document.getElementById('shop-overlay').addEventListener('click', e => {
+    if (e.target.id === 'shop-overlay')
+      document.getElementById('shop-overlay').classList.remove('open');
+  });
+
+  // ─── Button wiring ────────────────────────────────────────────────────────
+  document.getElementById('btn-start').addEventListener('click', startGame);
+  document.getElementById('btn-pause').addEventListener('click', togglePause);
+
+  // ─── Initial screen ───────────────────────────────────────────────────────
+  updateUI();
+  updatePauseBtn();
+  drawGrid();
+  ctx.fillStyle = '#4ecca3';
+  ctx.font = 'bold 18px Courier New';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('Druk Start om te beginnen', canvas.width / 2, canvas.height / 2);
   </script>
 </body>
 </html>
