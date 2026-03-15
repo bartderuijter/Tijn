@@ -166,7 +166,35 @@
     .ach-info{flex:1;}
     .ach-name{font-size:.78rem;font-weight:700;color:var(--text);}
     .ach-desc{font-size:.66rem;color:var(--sub);}
+    /* GLOBAL LEADERBOARD */
+    .lb-global-header{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:.74rem;color:var(--sub);}
+    .lb-live-dot{width:8px;height:8px;border-radius:50%;background:#4ecca3;flex-shrink:0;
+      animation:livePulse 2s ease-in-out infinite;}
+    @keyframes livePulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(78,204,163,.5)}
+      50%{opacity:.5;box-shadow:0 0 0 5px rgba(78,204,163,0)}}
+    .lb-loading{text-align:center;color:var(--sub);padding:24px;font-size:.82rem;}
+    .lb-loading::after{content:'';display:inline-block;width:14px;height:14px;border:2px solid var(--border);
+      border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin-left:8px;vertical-align:middle;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .lb-error{text-align:center;color:#e94560;padding:16px;font-size:.78rem;}
+    .lb-row .lb-skin{font-size:.9rem;width:22px;text-align:center;flex-shrink:0;}
+    /* SUBMIT SCORE MODAL */
+    #submit-overlay .modal{max-width:360px;text-align:center;}
+    .submit-score-big{font-size:2.8rem;font-weight:900;color:var(--accent);
+      line-height:1;margin:8px 0 4px;letter-spacing:-1px;}
+    .submit-score-meta{font-size:.75rem;color:var(--sub);margin-bottom:14px;}
+    .submit-name-inp{width:100%;background:var(--card);border:2px solid var(--border);
+      border-radius:10px;color:var(--text);font-family:inherit;font-size:1rem;
+      padding:9px 14px;outline:none;text-align:center;transition:border-color .2s;
+      margin-bottom:10px;}
+    .submit-name-inp:focus{border-color:var(--accent);}
+    .submit-btn-row{display:flex;gap:8px;justify-content:center;}
+    #submit-status{margin-top:10px;font-size:.75rem;min-height:1.1em;color:var(--accent);}
+    .submit-confirm-btn{background:linear-gradient(135deg,#4ecca3,#2d9e7e);color:#0d0d1a;font-size:.82rem;}
+    .submit-skip-btn{background:var(--card);color:var(--sub);border:1.5px solid var(--border);font-size:.82rem;}
   </style>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
 </head>
 <body>
   <canvas id="confetti-canvas"></canvas>
@@ -258,7 +286,36 @@
       <button class="btn modal-close" id="ach-close">Close</button>
     </div>
   </div>
+  <!-- Submit Score Modal -->
+  <div class="modal-overlay" id="submit-overlay">
+    <div class="modal">
+      <h2>&#127942; New High Score!</h2>
+      <div id="submit-score-meta" class="submit-score-meta"></div>
+      <div class="submit-score-big" id="submit-score-val">0</div>
+      <div style="color:var(--sub);font-size:.78rem;margin-bottom:12px">Submit to the global leaderboard?</div>
+      <input class="submit-name-inp" id="submit-name-inp" type="text" maxlength="20" placeholder="Your name&#8230;">
+      <div class="submit-btn-row">
+        <button class="btn submit-confirm-btn" id="submit-confirm">&#127758; Submit</button>
+        <button class="btn submit-skip-btn" id="submit-skip">Skip</button>
+      </div>
+      <div id="submit-status"></div>
+    </div>
+  </div>
   <script>
+  /* ── FIREBASE ── */
+  let db = null;
+  try {
+    firebase.initializeApp({
+      apiKey:            'AIzaSyBf-zRaQu3tyFYi7JNjacgb4MhGMHYxe8E',
+      authDomain:        'snake-game-leaderboard-2e7a6.firebaseapp.com',
+      projectId:         'snake-game-leaderboard-2e7a6',
+      storageBucket:     'snake-game-leaderboard-2e7a6.firebasestorage.app',
+      messagingSenderId: '351721687950',
+      appId:             '1:351721687950:web:2a23a4f345a9cabfdb32df',
+    });
+    db = firebase.firestore();
+  } catch(e) { console.warn('Firebase init failed:', e); }
+
   /* ── CANVAS & CONSTANTS ── */
   const canvas = document.getElementById('canvas');
   const ctx = canvas.getContext('2d');
@@ -957,6 +1014,7 @@
     updateMsg('Game over! Score: <strong>'+score+'</strong>'+tag+' &nbsp;|\u00a0\ud83e\ude99 '+save.coins);
     document.getElementById('btn-start').textContent='Restart';
     document.getElementById('btn-share').style.display='';updatePauseBtn();submitLB();
+    maybeOfferSubmit(score);
   }
   function restartInterval(){clearInterval(stepInterval);stepInterval=setInterval(doStep,speed);}
   function startGame(){
@@ -973,7 +1031,84 @@
     if(!paused)lastStepTime=performance.now();updatePauseBtn();
   }
 
-  /* ── LEADERBOARD ── */
+  /* ── FIRESTORE LEADERBOARD ── */
+  let globalLBUnsub = null;   // active onSnapshot unsubscribe handle
+  let pendingSubmitScore = 0; // score waiting in the submit modal
+
+  async function submitToFirestore(name, sc, mode, lv, skinId) {
+    if (!db) throw new Error('Firebase not available');
+    await db.collection('scores').add({
+      name:  name.trim().slice(0, 20) || 'Anonymous',
+      score: sc,
+      mode,
+      level: lv,
+      skin:  skinId,
+      ts:    firebase.firestore.FieldValue.serverTimestamp(),
+      date:  new Date().toLocaleDateString('en-GB'),
+    });
+  }
+
+  function startGlobalListen() {
+    if (globalLBUnsub) { globalLBUnsub(); globalLBUnsub = null; }
+    const list = document.getElementById('lb-list');
+    if (!db) {
+      list.innerHTML = '<div class="lb-error">&#9888; Firebase unavailable — showing local scores only.</div>';
+      return;
+    }
+    list.innerHTML = '<div class="lb-loading">Loading global scores</div>';
+    try {
+      globalLBUnsub = db.collection('scores')
+        .orderBy('score', 'desc')
+        .limit(10)
+        .onSnapshot(snap => {
+          if (snap.empty) {
+            list.innerHTML = '<p style="text-align:center;color:var(--sub);margin:16px 0">No global scores yet — be the first!</p>';
+            return;
+          }
+          const medals = ['\ud83e\udd47', '\ud83e\udd48', '\ud83e\udd49'];
+          const skinEmoji = id => (SKINS.find(s => s.id === id) || {emoji: '\ud83d\udc0d'}).emoji;
+          list.innerHTML =
+            '<div class="lb-global-header"><span class="lb-live-dot"></span>Live &mdash; updates in real time &mdash; Top 10 worldwide</div>' +
+            snap.docs.map((d, i) => {
+              const e = d.data();
+              const tag = e.mode === 'countdown' ? '60s' : e.mode === 'hard' ? 'hard' : e.mode === 'multi' ? '2P' : '';
+              return `<div class="lb-row">
+                <div class="lb-rank">${medals[i] || i + 1}</div>
+                <div class="lb-skin">${skinEmoji(e.skin)}</div>
+                <div class="lb-name">${e.name || 'Anonymous'}</div>
+                <div class="lb-score">${e.score}</div>
+                <div class="lb-info">${tag ? tag + '\u00b7' : ''}L${e.level || 1}${e.date ? '\u00b7' + e.date : ''}</div>
+              </div>`;
+            }).join('');
+        }, err => {
+          console.error('Firestore read error:', err);
+          list.innerHTML = '<div class="lb-error">&#9888; Could not load global scores.<br><small>' + err.message + '</small></div>';
+        });
+    } catch(e) {
+      list.innerHTML = '<div class="lb-error">&#9888; ' + e.message + '</div>';
+    }
+  }
+
+  function stopGlobalListen() {
+    if (globalLBUnsub) { globalLBUnsub(); globalLBUnsub = null; }
+  }
+
+  // Called after game ends if score is worth submitting
+  function maybeOfferSubmit(sc) {
+    if (sc < 10 || !db) return; // too low or no Firebase
+    pendingSubmitScore = sc;
+    document.getElementById('submit-score-val').textContent = sc;
+    const tag = gameMode === 'countdown' ? ' \u2022 60s mode' : gameMode === 'hard' ? ' \u2022 Hard mode' : '';
+    document.getElementById('submit-score-meta').textContent =
+      'Level ' + level + ' \u2022 ' + getSkin().name + ' skin' + tag;
+    document.getElementById('submit-name-inp').value = save.name || '';
+    document.getElementById('submit-status').textContent = '';
+    document.getElementById('submit-confirm').disabled = false;
+    document.getElementById('submit-confirm').textContent = '\ud83c\udf0d Submit';
+    document.getElementById('submit-overlay').classList.add('open');
+  }
+
+  /* ── LOCAL LEADERBOARD ── */
   function submitLB(){
     const s=gameMode==='multi'?Math.max(score,score2||0):score;
     if(s<5)return;
@@ -994,13 +1129,28 @@
       </div>`).join('');
   }
   function openLB(){
-    const modes=['all','classic','countdown','hard','multi'],labels=['All','Classic','60s','Hard','2P'];
-    const tabs=document.getElementById('lb-tabs');
-    tabs.innerHTML=modes.map((m,i)=>`<button class="lb-tab${m==='all'?' active':''}" data-m="${m}">${labels[i]}</button>`).join('');
+    const tabs = document.getElementById('lb-tabs');
+    // Global tab first, then local tabs
+    const globalBtn = '<button class="lb-tab active" data-m="global">\ud83c\udf0d Global</button>';
+    const localModes = ['all','classic','countdown','hard','multi'];
+    const localLabels = ['All','Classic','60s','Hard','2P'];
+    tabs.innerHTML = globalBtn + localModes.map((m,i)=>`<button class="lb-tab" data-m="${m}">${localLabels[i]}</button>`).join('');
+
     tabs.querySelectorAll('.lb-tab').forEach(b=>{
-      b.addEventListener('click',()=>{tabs.querySelectorAll('.lb-tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderLB(b.dataset.m);});
+      b.addEventListener('click',()=>{
+        tabs.querySelectorAll('.lb-tab').forEach(x=>x.classList.remove('active'));
+        b.classList.add('active');
+        if(b.dataset.m==='global'){
+          startGlobalListen();
+        } else {
+          stopGlobalListen();
+          renderLB(b.dataset.m);
+        }
+      });
     });
-    renderLB('all');document.getElementById('lb-overlay').classList.add('open');
+    // Start with global view
+    startGlobalListen();
+    document.getElementById('lb-overlay').classList.add('open');
   }
 
   /* ── SHOP ── */
@@ -1118,10 +1268,42 @@
   function closeShop(){document.getElementById('shop-overlay').classList.remove('open');if(spRAF){cancelAnimationFrame(spRAF);spRAF=null;}}
   document.getElementById('shop-close').addEventListener('click',closeShop);
   document.getElementById('shop-overlay').addEventListener('click',e=>{if(e.target.id==='shop-overlay')closeShop();});
-  document.getElementById('lb-close').addEventListener('click',()=>document.getElementById('lb-overlay').classList.remove('open'));
-  document.getElementById('lb-overlay').addEventListener('click',e=>{if(e.target.id==='lb-overlay')document.getElementById('lb-overlay').classList.remove('open');});
+  function closeLB(){stopGlobalListen();document.getElementById('lb-overlay').classList.remove('open');}
+  document.getElementById('lb-close').addEventListener('click',closeLB);
+  document.getElementById('lb-overlay').addEventListener('click',e=>{if(e.target.id==='lb-overlay')closeLB();});
   document.getElementById('ach-close').addEventListener('click',()=>document.getElementById('ach-overlay').classList.remove('open'));
   document.getElementById('ach-overlay').addEventListener('click',e=>{if(e.target.id==='ach-overlay')document.getElementById('ach-overlay').classList.remove('open');});
+  // Submit score modal
+  function closeSubmit(){document.getElementById('submit-overlay').classList.remove('open');}
+  document.getElementById('submit-skip').addEventListener('click',closeSubmit);
+  document.getElementById('submit-overlay').addEventListener('click',e=>{if(e.target.id==='submit-overlay')closeSubmit();});
+  document.getElementById('submit-confirm').addEventListener('click', async ()=>{
+    const nameEl  = document.getElementById('submit-name-inp');
+    const statusEl= document.getElementById('submit-status');
+    const btn     = document.getElementById('submit-confirm');
+    const name    = nameEl.value.trim() || 'Anonymous';
+    if(!name){nameEl.focus();return;}
+    btn.disabled = true;
+    btn.textContent = 'Submitting\u2026';
+    statusEl.style.color = 'var(--sub)';
+    statusEl.textContent = '';
+    try {
+      await submitToFirestore(name, pendingSubmitScore, gameMode, level, save.skin);
+      // Persist name for next time
+      save.name = name; writeSave(save);
+      document.getElementById('name-input').value = name;
+      statusEl.style.color = 'var(--accent)';
+      statusEl.textContent = '\u2728 Score submitted! Check the global leaderboard.';
+      btn.textContent = '\u2714 Done';
+      setTimeout(closeSubmit, 1800);
+    } catch(e) {
+      console.error(e);
+      statusEl.style.color = '#e94560';
+      statusEl.textContent = '\u26a0\ufe0f Failed: ' + (e.message || 'network error');
+      btn.disabled = false;
+      btn.textContent = '\ud83c\udf0d Retry';
+    }
+  });
   document.querySelectorAll('.tab-btn[data-mode]').forEach(btn=>{
     btn.addEventListener('click',()=>{document.querySelectorAll('.tab-btn[data-mode]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');selectedMode=btn.dataset.mode;});
   });
