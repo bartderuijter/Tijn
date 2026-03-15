@@ -140,6 +140,8 @@
     .rarity-rare     {background:#1a2a7a;color:#88bbff;}
     .rarity-epic     {background:#4a1a7a;color:#cc88ff;}
     .rarity-legendary{background:linear-gradient(90deg,#7a4a00,#c88800);color:#ffe066;}
+    .rarity-void{background:#000;color:#880018;border:1px solid #330008;
+      text-shadow:0 0 7px #ff002233;letter-spacing:2px;}
     .skin-bonus{font-size:.59rem;color:var(--accent);text-align:center;min-height:.9em;}
     .skin-badge{font-size:.62rem;padding:2px 7px;border-radius:8px;font-weight:800;}
     .badge-owned {background:#2d9e7e;color:#fff;}
@@ -368,6 +370,10 @@
         case 'nature':   col=`hsl(${100+Math.random()*40},65%,${32+Math.random()*18}%)`;sz=2.5+Math.random()*2.5;life=.9+Math.random()*.5;type='leaf';break;
         case 'shadow':   col=`rgba(${40+Math.random()*30},${40+Math.random()*20},${60+Math.random()*30},.75)`;sz=4+Math.random()*4;life=.45+Math.random()*.3;type='smoke';break;
         case 'ibis':     col=`hsl(${22+Math.random()*18},100%,${58+Math.random()*20}%)`;sz=1.5+Math.random()*2;life=.4+Math.random()*.3;type='spark';break;
+        case 'N':
+          if(Math.random()>.4)return; // sparse — only ~40% chance per emit call
+          col=`rgba(${2+Math.random()*8},0,${Math.random()*6},${.06+Math.random()*.14})`;
+          sz=8+Math.random()*9;life=1.4+Math.random()*1.2;type='smoke';break;
         default: return;
       }
       particles.push({x:cx,y:cy,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-(type==='fire'?.8:type==='smoke'?.5:0),
@@ -552,6 +558,34 @@
         c.beginPath();c.roundRect(px+pad,py+pad,g-pad*2,g-pad*2,isH?5:3);c.fill();
         c.strokeStyle=`rgba(110,50,180,${.35*pulse})`;c.lineWidth=1.5;
         c.beginPath();c.roundRect(px+pad,py+pad,g-pad*2,g-pad*2,isH?5:3);c.stroke();
+        c.globalAlpha=1;
+      }
+    },
+    {id:'N',name:'N',emoji:'&#127761;',rarity:'void',price:10000,bonusLabel:'Void \u2014 all bonuses \u00d72',
+      eyeColor:'#1a0000',beak:false,
+      drawSeg(c,px,py,g,i,len,ts,isH,al){
+        const pad=1,cx=px+g/2,cy=py+g/2;
+        // imperceptibly slow void breathe
+        const breathe=Math.sin(ts*.0025+i*.38)*.07;
+        // pure-black void fill — radial so head has the faintest centre highlight
+        const gr=c.createRadialGradient(cx+breathe*4,cy,0,cx,cy,g/2+2);
+        gr.addColorStop(0,isH?'#0e0004':'#060006');
+        gr.addColorStop(.5,'#030003');
+        gr.addColorStop(1,'#000000');
+        c.globalAlpha=al;c.fillStyle=gr;
+        c.beginPath();c.roundRect(px+pad,py+pad,g-pad*2,g-pad*2,isH?5:3);c.fill();
+        // whisper-thin dark-crimson edge that pulses
+        const edgeA=.06+breathe*.05;
+        c.strokeStyle=`rgba(70,0,12,${edgeA})`;c.lineWidth=2;
+        c.beginPath();c.roundRect(px+pad,py+pad,g-pad*2,g-pad*2,isH?5:3);c.stroke();
+        // head: faint void halo — like light being swallowed
+        if(isH){
+          const halo=c.createRadialGradient(cx,cy,g*.3,cx,cy,g*.8+breathe*g);
+          halo.addColorStop(0,'rgba(0,0,0,0)');
+          halo.addColorStop(.7,`rgba(10,0,4,${.18+breathe*.08})`);
+          halo.addColorStop(1,'rgba(0,0,0,0)');
+          c.fillStyle=halo;c.beginPath();c.arc(cx,cy,g*.8,0,PI2);c.fill();
+        }
         c.globalAlpha=1;
       }
     },
@@ -926,6 +960,7 @@
       let pts=10*level*((!isP2&&activePU&&activePU.type==='double')?2:1);
       if(!isP2&&sk.id==='fire')pts=Math.round(pts*1.1);
       if(!isP2&&sk.id==='lightning'&&activePU?.type==='double')pts=Math.round(pts*1.3);
+      if(!isP2&&sk.id==='N')pts*=2;
       if(isP2)score2+=pts;else score+=pts;
       let cg=level;
       if(!isP2&&(sk.id==='nature'||sk.id==='ibis'))cg=Math.round(cg*1.25);
@@ -959,8 +994,10 @@
       ate=true;
       let pts=30*level*(activePU?.type==='double'?2:1);
       if(sk.id==='galaxy'||sk.id==='ibis')pts=Math.round(pts*1.2);
+      if(sk.id==='N')pts*=2;
       score+=pts;
       let cg=5*level;if(sk.id==='nature'||sk.id==='ibis')cg=Math.round(cg*1.25);
+      if(sk.id==='N')cg*=2;
       save.coins+=cg;save.stats.bonus++;bonus=null;SFX.bonus();
       emitP(sk.id,head.x,head.y,8);
       if(score>save.highscore){if(!save.stats.beatHS){startConfetti();save.stats.beatHS=true;}save.highscore=score;}
