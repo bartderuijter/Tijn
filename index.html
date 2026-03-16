@@ -1854,7 +1854,6 @@
   function startAdventure(levelIdx){
     advCurrentLevel=levelIdx;
     gameMode='adventure';
-    selectedMode='adventure';
     clearInterval(stepInterval);if(rafId){cancelAnimationFrame(rafId);rafId=null;}
     if(goAnimRAF){cancelAnimationFrame(goAnimRAF);goAnimRAF=null;}
     showScreen('game-screen');stopMenuAnim();
