@@ -564,6 +564,7 @@
         case 'nature':   col=`hsl(${100+Math.random()*40},65%,${32+Math.random()*18}%)`;sz=2.5+Math.random()*2.5;life=.9+Math.random()*.5;type='leaf';break;
         case 'shadow':   col=`rgba(${40+Math.random()*30},${40+Math.random()*20},${60+Math.random()*30},.75)`;sz=4+Math.random()*4;life=.45+Math.random()*.3;type='smoke';break;
         case 'ibis':     col=`hsl(${22+Math.random()*18},100%,${58+Math.random()*20}%)`;sz=1.5+Math.random()*2;life=.4+Math.random()*.3;type='spark';break;
+        case 'chicken':  col=`hsl(${38+Math.random()*16},${20+Math.random()*15}%,${88+Math.random()*8}%)`;sz=3+Math.random()*4;life=1.2+Math.random()*.8;type='leaf';break;
         case 'champion': {
           const palette=[42,50,200,280,0];
           col=`hsl(${palette[Math.floor(Math.random()*palette.length)]},100%,${65+Math.random()*22}%)`;
@@ -777,6 +778,48 @@
         c.globalAlpha=1;
       }
     },
+    {id:'chicken',name:'Chicken',emoji:'&#128020;',rarity:'legendary',price:6767,bonusLabel:'Bonus +20%',
+      eyeColor:'#ff4400',beak:false,
+      drawSeg(c,px,py,g,i,len,ts,isH,al){
+        const pad=2,cx=px+g/2,cy=py+g/2;
+        // Fluffy white body — base fill
+        const fluff=.9+.1*Math.sin(ts*.011+i*.9);
+        c.globalAlpha=al;
+        c.fillStyle=`hsl(40,${18+Math.sin(ts*.007+i)*.8}%,${94+fluff*3}%)`;
+        c.beginPath();c.roundRect(px+pad,py+pad,g-pad*2,g-pad*2,isH?6:4);c.fill();
+        // Fluffy texture — small overlapping arcs simulating feathers
+        c.fillStyle=`rgba(255,255,255,${.55+.15*fluff})`;
+        for(let k=0;k<4;k++){
+          const fx=cx+Math.cos(k/4*Math.PI*2+ts*.004+i*.6)*(g*.22);
+          const fy=cy+Math.sin(k/4*Math.PI*2+ts*.004+i*.6)*(g*.18);
+          c.beginPath();c.ellipse(fx,fy,g*.22,g*.14,k*.8,0,Math.PI*2);c.fill();
+        }
+        // Wing quill line on body segments
+        if(!isH){
+          c.strokeStyle=`rgba(210,200,185,${.55*fluff})`;c.lineWidth=.8;
+          c.beginPath();c.moveTo(cx-g*.25,cy-g*.22);c.quadraticCurveTo(cx,cy,cx-g*.25,cy+g*.22);c.stroke();
+          c.beginPath();c.moveTo(cx+g*.25,cy-g*.22);c.quadraticCurveTo(cx,cy,cx+g*.25,cy+g*.22);c.stroke();
+        }
+        c.globalAlpha=1;
+      },
+      drawHead(c,cx,cy,ts){
+        // Red comb — three bumps above the head
+        const bob=Math.sin(ts*.005)*1.5;
+        c.save();
+        c.fillStyle='#cc1111';
+        for(let k=0;k<3;k++){
+          const bx=cx+(k-1)*4,by=cy-GRID/2-4+bob-(k===1?3:0);
+          c.beginPath();c.arc(bx,by,3.2,0,Math.PI*2);c.fill();
+        }
+        // Wattle (red chin flap)
+        c.fillStyle='#dd2222';
+        c.beginPath();c.ellipse(cx+1,cy+GRID/2-2,2.5,4,-.15,0,Math.PI*2);c.fill();
+        // Beak
+        c.fillStyle='#f5a623';
+        c.beginPath();c.moveTo(cx+GRID/2-1,cy-2);c.lineTo(cx+GRID/2+7,cy);c.lineTo(cx+GRID/2-1,cy+2);c.closePath();c.fill();
+        c.restore();
+      },
+    },
     {id:'champion',name:'Champion',emoji:'&#128081;',rarity:'champion',price:0,
       bonusLabel:'All points \u00d71.5 \u00b7 Coins \u00d71.5',
       unlockHint:'Reach #1 on the global leaderboard',
@@ -980,7 +1023,7 @@
        {x:12,y:7,path:[{x:12,y:5},{x:12,y:9}],type:'patrol',tickRate:6}],
      starTime:60,coinReward:1100,xpReward:180},
     {id:7,name:'Star Chase',emoji:'⭐',
-     goal:{type:'bonus',value:5,label:'Collect 5 stars'},
+     goal:{type:'bonus',value:3,label:'Collect 3 stars'},
      speed:122,
      walls:(()=>{const w=[];for(let x=5;x<=9;x++){w.push({x,y:6});w.push({x,y:18});}for(let x=15;x<=19;x++){w.push({x,y:6});w.push({x,y:18});}for(let y=8;y<=16;y++){w.push({x:5,y});w.push({x:19,y});}return w;})(),
      enemyDefs:[
