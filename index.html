@@ -232,6 +232,90 @@
     #submit-status{margin-top:10px;font-size:.75rem;min-height:1.1em;color:var(--accent);}
     .submit-confirm-btn{background:linear-gradient(135deg,#4ecca3,#2d9e7e);color:#0d0d1a;font-size:.82rem;}
     .submit-skip-btn{background:var(--card);color:var(--sub);border:1.5px solid var(--border);font-size:.82rem;}
+    /* ADVENTURE SELECT */
+    #adv-screen{padding:14px 20px 32px;align-items:center;
+      background:radial-gradient(ellipse at 50% 20%,#1a0830 0%,#0d0d1a 70%);}
+    body.day #adv-screen{background:radial-gradient(ellipse at 50% 20%,#ccc8d8 0%,#e8f0e8 70%);}
+    .adv-title{font-size:1.8rem;font-weight:900;letter-spacing:6px;text-transform:uppercase;
+      background:linear-gradient(135deg,#f5a623,#e94560);-webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;background-clip:text;margin-bottom:2px;}
+    .adv-tagline{font-size:.72rem;color:var(--sub);letter-spacing:3px;margin-bottom:10px;}
+    .adv-xp-wrap{width:min(500px,94vw);margin-bottom:14px;}
+    .adv-xp-head{display:flex;justify-content:space-between;font-size:.65rem;color:var(--sub);margin-bottom:3px;}
+    .adv-xp-bar{background:var(--card);border:1px solid var(--border);border-radius:8px;height:11px;overflow:hidden;}
+    .adv-xp-fill{height:100%;background:linear-gradient(90deg,#f5a623,#e94560);transition:width .5s;}
+    .level-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;width:min(500px,94vw);margin-bottom:12px;}
+    .lv-card{background:var(--card);border:2px solid var(--border);border-radius:12px;
+      padding:8px 4px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;
+      cursor:pointer;transition:border-color .15s,transform .12s,box-shadow .15s;}
+    .lv-card:hover{border-color:var(--accent);transform:translateY(-2px);
+      box-shadow:0 4px 16px rgba(78,204,163,.25);}
+    .lv-card.lv-locked{opacity:.42;cursor:default;filter:grayscale(.5);}
+    .lv-card.lv-locked:hover{border-color:var(--border);transform:none;box-shadow:none;}
+    .lv-card.lv-done{border-color:#f5a623;}
+    .lv-emoji{font-size:1.3rem;}.lv-num{font-size:.58rem;font-weight:900;color:var(--sub);}
+    .lv-name{font-size:.46rem;color:var(--sub);text-align:center;line-height:1.2;}
+    .lv-stars{font-size:.85rem;letter-spacing:1px;}
+    /* LEVEL COMPLETE */
+    #lc-overlay{position:fixed;inset:0;background:rgba(0,0,20,.92);z-index:110;
+      display:none;flex-direction:column;align-items:center;justify-content:center;
+      backdrop-filter:blur(7px);}
+    #lc-overlay.open{display:flex;}
+    .lc-badge{font-size:.7rem;font-weight:800;letter-spacing:4px;text-transform:uppercase;color:var(--sub);}
+    .lc-title{font-size:2.2rem;font-weight:900;color:var(--accent);letter-spacing:5px;
+      text-transform:uppercase;margin-bottom:4px;animation:lcIn .5s ease-out;}
+    @keyframes lcIn{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+    .lc-stars-row{font-size:3rem;letter-spacing:10px;margin:8px 0;animation:lcIn .6s ease-out .2s both;}
+    .lc-rewards{display:flex;gap:28px;margin:8px 0 12px;}
+    .lc-rew{display:flex;flex-direction:column;align-items:center;gap:2px;}
+    .lc-rew-val{font-size:1.5rem;font-weight:900;color:var(--accent);}
+    .lc-rew-lbl{font-size:.6rem;color:var(--sub);text-transform:uppercase;}
+    .lc-star-list{display:flex;flex-direction:column;gap:4px;margin-bottom:14px;width:260px;}
+    .lc-star-item{display:flex;align-items:center;gap:8px;font-size:.72rem;color:#555;}
+    .lc-star-item.earned{color:var(--text);}
+    .lc-btn-row{display:flex;gap:10px;}
+    /* ADVENTURE HUD */
+    #hud-goal{flex:2;}
+    .hud-goal-bar{width:100%;background:rgba(255,255,255,.1);height:4px;border-radius:2px;margin-top:2px;}
+    .hud-goal-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .2s;}
+    #hud-lives .hud-value{color:#e94560;}
+    /* NEW SHOP SECTIONS */
+    .pu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:4px;}
+    .pu-card{background:var(--card);border:2px solid var(--border);border-radius:10px;
+      padding:9px 8px;cursor:pointer;transition:border-color .15s,transform .12s;}
+    .pu-card:hover{border-color:var(--accent);transform:translateY(-1px);}
+    .pu-header{display:flex;align-items:center;gap:7px;margin-bottom:3px;}
+    .pu-icon{font-size:1.22rem;}
+    .pu-name{font-size:.72rem;font-weight:700;color:var(--text);}
+    .pu-desc{font-size:.6rem;color:var(--sub);margin-bottom:4px;line-height:1.4;}
+    .pu-footer{display:flex;justify-content:space-between;align-items:center;}
+    .pu-price{font-size:.62rem;font-weight:800;color:var(--coin);}
+    .pu-status{font-size:.62rem;color:var(--accent);font-weight:800;}
+    .music-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:4px;}
+    .music-card{background:var(--card);border:2px solid var(--border);border-radius:9px;
+      padding:7px 5px;display:flex;flex-direction:column;align-items:center;gap:3px;
+      cursor:pointer;transition:border-color .15s,transform .12s;}
+    .music-card:hover{border-color:var(--accent);transform:translateY(-1px);}
+    .music-card.music-active{border-color:var(--accent);box-shadow:0 0 10px rgba(78,204,163,.3);}
+    .music-card.music-locked{opacity:.55;cursor:default;}
+    .music-card.music-locked:hover{border-color:var(--border);transform:none;}
+    .music-icon{font-size:1.4rem;}
+    .music-name{font-size:.65rem;font-weight:700;color:var(--text);}
+    .music-price{font-size:.53rem;color:var(--coin);}
+    .border-grid2{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px;}
+    .border-card{background:var(--card);border:2px solid var(--border);border-radius:10px;
+      padding:8px;display:flex;flex-direction:column;align-items:center;gap:3px;
+      cursor:pointer;transition:border-color .15s,transform .12s;}
+    .border-card:hover{border-color:var(--accent);transform:translateY(-1px);}
+    .border-card.border-active{border-color:var(--accent);box-shadow:0 0 10px rgba(78,204,163,.3);}
+    .border-card.border-locked{opacity:.55;cursor:default;}
+    .border-card.border-locked:hover{border-color:var(--border);transform:none;}
+    .border-icon{font-size:1.3rem;}
+    .border-name{font-size:.65rem;font-weight:700;color:var(--text);}
+    .border-price{font-size:.53rem;color:var(--coin);}
+    .booster-active{font-size:.65rem;color:var(--accent);background:rgba(78,204,163,.1);
+      border:1px solid rgba(78,204,163,.3);border-radius:6px;padding:2px 8px;
+      text-align:center;margin-bottom:6px;}
   </style>
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
@@ -248,11 +332,32 @@
         &#128100; <input id="name-input" type="text" maxlength="16" placeholder="Your name&hellip;">
       </div>
       <button class="menu-play-btn" id="btn-play">&#9658; PLAY</button>
+      <button class="menu-play-btn" id="btn-adventure"
+        style="background:linear-gradient(135deg,#f5a623,#e94560);margin-top:-6px;margin-bottom:14px">
+        &#128081; ADVENTURE
+      </button>
       <div class="menu-btn-row">
         <button class="menu-btn" id="menu-shop">&#127978; Shop</button>
         <button class="menu-btn" id="menu-scores">&#127942; Scores</button>
         <button class="menu-btn" id="menu-achiev">&#127885; Achievements</button>
         <button class="menu-btn" id="menu-theme">&#9728;&#65039; Day</button>
+      </div>
+    </div>
+    <!-- Adventure Level Select -->
+    <div class="screen hidden-right" id="adv-screen">
+      <button class="menu-btn" id="adv-back-btn" style="margin:10px 0 6px;align-self:flex-start">&#8592; Menu</button>
+      <div class="adv-title">ADVENTURE</div>
+      <div class="adv-tagline">10 LEVELS &middot; ENEMIES &middot; REWARDS</div>
+      <div class="adv-xp-wrap">
+        <div class="adv-xp-head">
+          <span id="adv-xp-level">Adventurer Lv.1</span>
+          <span id="adv-xp-val">0 / 100 XP</span>
+        </div>
+        <div class="adv-xp-bar"><div class="adv-xp-fill" id="adv-xp-fill" style="width:0%"></div></div>
+      </div>
+      <div class="level-grid" id="level-grid"></div>
+      <div style="font-size:.68rem;color:var(--sub);text-align:center;padding:0 20px">
+        &#11088; Complete goals &nbsp;&middot;&nbsp; &#129352; Complete fast &nbsp;&middot;&nbsp; &#128737; No lives lost
       </div>
     </div>
     <div class="screen hidden-right" id="game-screen">
@@ -264,6 +369,15 @@
         <div class="hud-stat" id="hud-coins"><span class="hud-label">&#129689;</span><span class="hud-value" id="coins">0</span></div>
         <div class="hud-stat" id="hud-timer" style="display:none"><span class="hud-label">Time</span><span class="hud-value" id="timer">60.0</span></div>
         <div class="hud-stat" id="hud-p2score" style="display:none"><span class="hud-label">P2</span><span class="hud-value" id="p2score">0</span></div>
+        <div class="hud-stat" id="hud-goal" style="display:none">
+          <span class="hud-label" id="hud-goal-label">Goal</span>
+          <span class="hud-value" id="hud-goal-val">0/5</span>
+          <div class="hud-goal-bar"><div class="hud-goal-fill" id="hud-goal-fill" style="width:0%"></div></div>
+        </div>
+        <div class="hud-stat" id="hud-lives" style="display:none">
+          <span class="hud-label">Lives</span>
+          <span class="hud-value" id="hud-lives-val">&#128154;</span>
+        </div>
       </div>
       <div class="tab-row" id="mode-tabs">
         <button class="tab-btn active" data-mode="classic">Classic</button>
@@ -325,6 +439,12 @@
         </div>
         <div style="margin-top:6px"><button class="btn" id="title-unlock-btn" style="font-size:.7rem;padding:.3rem 1rem">&#129689; Unlock for 1,000</button></div>
       </div>
+      <div class="shop-section-title">&#9889; Power-Ups &amp; Boosts</div>
+      <div id="shop-pu-grid" class="pu-grid"></div>
+      <div class="shop-section-title">&#127925; Music</div>
+      <div id="shop-music-grid" class="music-grid"></div>
+      <div class="shop-section-title">&#128396;&#65039; Borders</div>
+      <div id="shop-border-grid" class="border-grid2"></div>
       <button class="btn modal-close" id="shop-close">Close</button>
     </div>
   </div>
@@ -343,6 +463,23 @@
       <h2>&#127885; Achievements</h2>
       <div class="ach-list" id="ach-list"></div>
       <button class="btn modal-close" id="ach-close">Close</button>
+    </div>
+  </div>
+  <!-- Level Complete Overlay -->
+  <div id="lc-overlay">
+    <div class="lc-badge" id="lc-badge">LEVEL 1 COMPLETE</div>
+    <div class="lc-title">COMPLETE!</div>
+    <div class="lc-stars-row" id="lc-stars">&#11088;&#11088;&#11088;</div>
+    <div class="lc-rewards">
+      <div class="lc-rew"><div class="lc-rew-val" id="lc-coins">+300</div><div class="lc-rew-lbl">&#129689; Coins</div></div>
+      <div class="lc-rew"><div class="lc-rew-val" id="lc-xp">+50</div><div class="lc-rew-lbl">XP</div></div>
+      <div class="lc-rew"><div class="lc-rew-val" id="lc-score-val">0</div><div class="lc-rew-lbl">Score</div></div>
+    </div>
+    <div class="lc-star-list" id="lc-star-list"></div>
+    <div class="lc-btn-row">
+      <button class="btn" id="lc-retry" style="background:var(--card);color:var(--text);border:1.5px solid var(--border)">&#8635; Retry</button>
+      <button class="btn" id="lc-next" style="background:linear-gradient(135deg,#f5a623,#e94560);color:#fff">Next &#8594;</button>
+      <button class="btn" id="lc-select" style="background:var(--card);color:var(--text);border:1.5px solid var(--border)">&#9783; Levels</button>
     </div>
   </div>
   <!-- Submit Score Modal -->
@@ -697,6 +834,88 @@
       }
     },
   ];
+  /* ── MUSIC ENGINE ── */
+  let musicTid=null,musicBeat=0;
+  function startMusic(id){
+    stopMusic();
+    save.activeMusic=id;writeSave(save);
+    const trk=MUSIC_TRACKS.find(t=>t.id===id);
+    if(!trk||!trk.pattern.length)return;
+    musicBeat=0;
+    function playNext(){
+      const [freq,dur,vol]=trk.pattern[musicBeat%trk.pattern.length];
+      if(freq>0)tone(freq,'sine',dur*.38,vol*.55);
+      musicBeat++;
+      musicTid=setTimeout(playNext,dur*500);
+    }
+    playNext();
+  }
+  function stopMusic(){if(musicTid){clearTimeout(musicTid);musicTid=null;}musicBeat=0;}
+
+  /* ── BORDER RENDERER ── */
+  function drawBorder(ts){
+    const id=save.activeBorder;
+    if(!id||id==='none')return;
+    const pulse=.65+.35*Math.sin(ts*.006);
+    ctx.save();
+    if(id==='fire'){
+      const hue=18+Math.sin(ts*.005)*14;
+      ctx.strokeStyle=`hsl(${hue},100%,${52+pulse*22}%)`;
+      ctx.shadowColor=`hsl(${hue},100%,55%)`;ctx.shadowBlur=14*pulse;ctx.lineWidth=4;
+    } else if(id==='ice'){
+      const hue=200+Math.sin(ts*.004)*18;
+      ctx.strokeStyle=`hsl(${hue},78%,${64+pulse*22}%)`;
+      ctx.shadowColor='#aae8ff';ctx.shadowBlur=11*pulse;ctx.lineWidth=4;
+    } else if(id==='gold'){
+      ctx.strokeStyle=`rgba(255,215,0,${.6+pulse*.4})`;
+      ctx.shadowColor='#ffd700';ctx.shadowBlur=15*pulse;ctx.lineWidth=5;
+    } else if(id==='neon'){
+      const hue=(ts*.07)%360;
+      ctx.strokeStyle=`hsl(${hue},100%,60%)`;
+      ctx.shadowColor=`hsl(${hue},100%,65%)`;ctx.shadowBlur=13;ctx.lineWidth=4;
+      ctx.strokeRect(4,4,W-8,H-8);
+      ctx.strokeStyle=`hsla(${(hue+180)%360},100%,60%,.4)`;ctx.lineWidth=1.5;ctx.shadowBlur=0;
+    }
+    ctx.strokeRect(2,2,W-4,H-4);
+    ctx.restore();
+  }
+
+  /* ── AIM ASSIST ── */
+  let _aimCache=null,_aimFood=null;
+  function getAimPath(){
+    if(!food)return null;
+    const fk=`${food.x},${food.y}`;
+    if(_aimFood===fk&&_aimCache)return _aimCache;
+    _aimFood=fk;
+    const head=snake[0];
+    const q=[[head,[]]];const vis=new Set([`${head.x},${head.y}`]);
+    const bodySet=new Set(snake.slice(1).map(s=>`${s.x},${s.y}`));
+    while(q.length){
+      const [pos,path]=q.shift();
+      if(pos.x===food.x&&pos.y===food.y){_aimCache=path;return path;}
+      for(const d of [{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}]){
+        const nx=pos.x+d.x,ny=pos.y+d.y;
+        const k=`${nx},${ny}`;
+        if(nx<0||nx>=COLS||ny<0||ny>=ROWS||isObs(nx,ny)||bodySet.has(k)||vis.has(k))continue;
+        vis.add(k);q.push([{x:nx,y:ny},[...path,d]]);
+      }
+    }
+    _aimCache=null;return null;
+  }
+  function drawAimAssist(){
+    if(!aimAssistActive||state!=='playing'||paused)return;
+    const path=getAimPath();if(!path||!path.length)return;
+    ctx.save();
+    ctx.strokeStyle='rgba(78,204,163,.35)';ctx.lineWidth=2;ctx.setLineDash([3,5]);
+    ctx.beginPath();
+    let x=snake[0].x,y=snake[0].y;
+    ctx.moveTo(x*GRID+GRID/2,y*GRID+GRID/2);
+    for(const d of path.slice(0,10)){
+      x+=d.x;y+=d.y;ctx.lineTo(x*GRID+GRID/2,y*GRID+GRID/2);
+    }
+    ctx.stroke();ctx.setLineDash([]);ctx.restore();
+  }
+
   /* ── BACKGROUNDS ── */
   const BACKGROUNDS=[
     {id:'dark',    name:'Dark',        color:'#0d0d1a', gridColor:'#1a1a35', price:0},
@@ -716,6 +935,114 @@
     {id:'shatter',   name:'Shatter',   icon:'&#10052;',  desc:'Screen shatters to pieces', price:5000},
     {id:'blackhole', name:'Blackhole', icon:'&#11044;',  desc:'Vortex pulls you in',       price:7500},
     {id:'glitch',    name:'Glitch',    icon:'&#127918;', desc:'Reality breaks down',       price:7500},
+  ];
+
+  /* ── ADVENTURE LEVELS ── */
+  const ADV_LEVELS=[
+    {id:1,name:'First Steps',emoji:'🌱',
+     goal:{type:'food',value:5,label:'Eat 5 food'},
+     speed:185,walls:[],enemyDefs:[],starTime:25,coinReward:300,xpReward:50},
+    {id:2,name:'Garden Walls',emoji:'🌿',
+     goal:{type:'food',value:8,label:'Eat 8 food'},
+     speed:168,
+     walls:(()=>{const w=[];for(let x=2;x<=10;x++)w.push({x,y:8});for(let x=14;x<=22;x++)w.push({x,y:16});return w;})(),
+     enemyDefs:[{x:6,y:4,path:[{x:2,y:4},{x:10,y:4}],type:'patrol',tickRate:5}],
+     starTime:45,coinReward:450,xpReward:75},
+    {id:3,name:'Speed Trap',emoji:'⚡',
+     goal:{type:'survive',value:40,label:'Survive 40s'},
+     speed:155,
+     walls:(()=>{const w=[];for(let x=2;x<=10;x++)w.push({x,y:5});for(let y=5;y<=13;y++)w.push({x:10,y});for(let x=14;x<=22;x++)w.push({x,y:19});for(let y=11;y<=19;y++)w.push({x:14,y});return w;})(),
+     enemyDefs:[{x:18,y:8,path:[{x:15,y:8},{x:22,y:8}],type:'patrol',tickRate:6}],
+     starTime:40,coinReward:600,xpReward:100},
+    {id:4,name:'Cross Roads',emoji:'✚',
+     goal:{type:'score',value:200,label:'Score 200'},
+     speed:148,
+     walls:(()=>{const w=[];for(let x=7;x<=17;x++)w.push({x,y:12});for(let y=7;y<=17;y++)if(y!==12)w.push({x:12,y});return w;})(),
+     enemyDefs:[
+       {x:4,y:4,path:[{x:2,y:4},{x:6,y:4}],type:'patrol',tickRate:6},
+       {x:20,y:20,path:[{x:18,y:20},{x:22,y:20}],type:'patrol',tickRate:6}],
+     starTime:55,coinReward:750,xpReward:120},
+    {id:5,name:'The Corridor',emoji:'🚧',
+     goal:{type:'food',value:12,label:'Eat 12 food'},
+     speed:140,
+     walls:(()=>{const w=[];for(let x=1;x<=10;x++)w.push({x,y:6});for(let x=14;x<=23;x++)w.push({x,y:6});for(let x=1;x<=10;x++)w.push({x,y:18});for(let x=14;x<=23;x++)w.push({x,y:18});return w;})(),
+     enemyDefs:[
+       {x:6,y:3,path:[{x:2,y:3},{x:10,y:3}],type:'patrol',tickRate:5},
+       {x:18,y:21,path:[{x:14,y:21},{x:22,y:21}],type:'patrol',tickRate:5}],
+     starTime:70,coinReward:900,xpReward:150},
+    {id:6,name:'Survival',emoji:'⏱',
+     goal:{type:'survive',value:60,label:'Survive 60s'},
+     speed:130,
+     walls:(()=>{const w=[];[[2,2],[21,2],[2,21],[21,21]].forEach(([bx,by])=>{for(let dx=0;dx<3;dx++)for(let dy=0;dy<3;dy++)w.push({x:bx+dx,y:by+dy});});for(let x=10;x<=14;x++){w.push({x,y:10});w.push({x,y:14});}for(let y=10;y<=14;y++){w.push({x:10,y});w.push({x:14,y});}return w;})(),
+     enemyDefs:[
+       {x:8,y:8,path:[{x:5,y:8},{x:11,y:8}],type:'patrol',tickRate:5},
+       {x:16,y:16,path:[{x:13,y:16},{x:19,y:16}],type:'patrol',tickRate:5},
+       {x:12,y:7,path:[{x:12,y:5},{x:12,y:9}],type:'patrol',tickRate:6}],
+     starTime:60,coinReward:1100,xpReward:180},
+    {id:7,name:'Star Chase',emoji:'⭐',
+     goal:{type:'bonus',value:5,label:'Collect 5 stars'},
+     speed:122,
+     walls:(()=>{const w=[];for(let x=5;x<=9;x++){w.push({x,y:6});w.push({x,y:18});}for(let x=15;x<=19;x++){w.push({x,y:6});w.push({x,y:18});}for(let y=8;y<=16;y++){w.push({x:5,y});w.push({x:19,y});}return w;})(),
+     enemyDefs:[
+       {x:12,y:3,path:[{x:10,y:3},{x:14,y:3}],type:'patrol',tickRate:4},
+       {x:2,y:12,path:[{x:2,y:8},{x:2,y:16}],type:'patrol',tickRate:4},
+       {x:22,y:12,path:[{x:22,y:8},{x:22,y:16}],type:'patrol',tickRate:4}],
+     starTime:90,coinReward:1300,xpReward:200},
+    {id:8,name:'The Gauntlet',emoji:'🛡',
+     goal:{type:'score',value:500,label:'Score 500'},
+     speed:110,
+     walls:(()=>{const w=[];for(let x=0;x<=14;x++)w.push({x,y:8});for(let x=10;x<=24;x++)w.push({x,y:16});return w;})(),
+     enemyDefs:[
+       {x:5,y:5,path:[{x:2,y:5},{x:8,y:5}],type:'patrol',tickRate:4},
+       {x:19,y:5,path:[{x:16,y:5},{x:22,y:5}],type:'patrol',tickRate:4},
+       {x:4,y:20,path:[{x:2,y:20},{x:8,y:20}],type:'patrol',tickRate:4},
+       {x:20,y:20,path:[{x:16,y:20},{x:22,y:20}],type:'patrol',tickRate:4}],
+     starTime:100,coinReward:1600,xpReward:240},
+    {id:9,name:'The Abyss',emoji:'🕳',
+     goal:{type:'food',value:18,label:'Eat 18 food'},
+     speed:95,
+     walls:(()=>{const w=[];for(let c=0;c<5;c++){const ox=2+c*4;for(let y=1;y<=4;y++)if(y!==2)w.push({x:ox,y:y+1});}for(let c=0;c<4;c++){const oy=13+c*2;for(let x=3;x<=21;x+=5)w.push({x,y:oy});}return w;})(),
+     enemyDefs:[
+       {x:12,y:8,path:[{x:8,y:8},{x:16,y:8}],type:'patrol',tickRate:3},
+       {x:3,y:16,path:[{x:3,y:13},{x:3,y:19}],type:'patrol',tickRate:3},
+       {x:21,y:16,path:[{x:21,y:13},{x:21,y:19}],type:'patrol',tickRate:3},
+       {x:12,y:20,path:[{x:8,y:20},{x:16,y:20}],type:'patrol',tickRate:3}],
+     starTime:120,coinReward:2000,xpReward:300},
+    {id:10,name:'Final Boss',emoji:'👑',
+     goal:{type:'score',value:1000,label:'Score 1000'},
+     speed:80,
+     walls:(()=>{const w=[];for(let x=4;x<=20;x++)if(x<8||x>16){w.push({x,y:6});w.push({x,y:18});}for(let y=7;y<=17;y++)if(y<9||y>15){w.push({x:4,y});w.push({x:20,y});}return w;})(),
+     enemyDefs:[
+       {x:12,y:3,path:[{x:9,y:3},{x:15,y:3}],type:'patrol',tickRate:3},
+       {x:2,y:12,path:[{x:2,y:9},{x:2,y:15}],type:'patrol',tickRate:3},
+       {x:22,y:12,path:[{x:22,y:9},{x:22,y:15}],type:'patrol',tickRate:3},
+       {x:12,y:21,path:[{x:9,y:21},{x:15,y:21}],type:'patrol',tickRate:3},
+       {x:12,y:12,path:[],type:'chase',tickRate:5}],
+     starTime:150,coinReward:3000,xpReward:500},
+  ];
+  const ADV_XP_THRESHOLDS=[0,100,250,500,1000,2000,4000,7000,12000,20000,35000];
+
+  /* ── SHOP ITEMS ── */
+  const MUSIC_TRACKS=[
+    {id:'silent', name:'Silent',  icon:'🔇', price:0,      pattern:[]},
+    {id:'lofi',   name:'Lofi',    icon:'🎵', price:30000,  pattern:[[262,.5,.1],[0,.3,0],[294,.5,.09],[0,.3,0],[330,.75,.11],[0,.5,0],[349,.5,.07],[0,.75,0]]},
+    {id:'retro',  name:'Retro',   icon:'👾', price:30000,  pattern:[[523,.2,.09],[587,.2,.09],[659,.2,.09],[784,.2,.09],[659,.2,.09],[523,.2,.09],[392,.4,.11],[0,.4,0]]},
+    {id:'edm',    name:'EDM',     icon:'🎛', price:30000,  pattern:[[110,.2,.13],[0,.1,0],[110,.2,.13],[0,.1,0],[165,.2,.13],[0,.2,0],[147,.4,.13],[0,.4,0]]},
+    {id:'epic',   name:'Epic',    icon:'🎼', price:30000,  pattern:[[196,1,.1],[220,1,.1],[246,1,.1],[261,2,.13],[0,.5,0]]},
+  ];
+  const BORDERS_LIST=[
+    {id:'none', name:'None', icon:'⬜', price:0},
+    {id:'fire', name:'Fire', icon:'🔥', price:60000},
+    {id:'ice',  name:'Ice',  icon:'❄️', price:60000},
+    {id:'gold', name:'Gold', icon:'🥇', price:60000},
+    {id:'neon', name:'Neon', icon:'💜', price:60000},
+  ];
+  const SHOP_POWERUPS=[
+    {id:'extralives', icon:'💀', name:'Extra Life',    desc:'Start next game with 1 extra life',       price:15000, type:'charge'},
+    {id:'scoreboost', icon:'🔍', name:'Score Booster', desc:'+25% coins earned for 24 hours',           price:40000, type:'timed',  dur:86400000},
+    {id:'aimassist',  icon:'🎯', name:'Aim Assist',    desc:'Safe path hint for 1 game',               price:20000, type:'charge'},
+    {id:'xpboost',    icon:'⭐', name:'XP Boost',      desc:'Double XP in Adventure for 1 hour',       price:25000, type:'timed',  dur:3600000},
+    {id:'mysterybox', icon:'🎰', name:'Mystery Box',   desc:'Random skin, background, or animation',   price:10000, type:'instant'},
   ];
 
   const P2_DEF={id:'p2',emoji:'&#128101;',eyeColor:'#ffffff',beak:false,drawExtra:null,
@@ -843,6 +1170,16 @@
   save.ownedAnims  =save.ownedAnims  ||['classic'];
   save.titleUnlocked=save.titleUnlocked||false;
   save.title       =save.title       ||'';
+  save.xp          =save.xp          ||0;
+  save.advProgress =save.advProgress ||{}; // {levelId:{stars,time,firstClear}}
+  save.activeMusic =save.activeMusic ||'silent';
+  save.ownedMusic  =save.ownedMusic  ||['silent'];
+  save.activeBorder=save.activeBorder||'none';
+  save.ownedBorders=save.ownedBorders||['none'];
+  save.extraLifeCharges  =save.extraLifeCharges  ||0;
+  save.aimAssistCharges  =save.aimAssistCharges  ||0;
+  save.scoreBoostExpiry  =save.scoreBoostExpiry  ||0;
+  save.xpBoostExpiry     =save.xpBoostExpiry     ||0;
   const validIds=SKINS.map(s=>s.id);
   save.owned=save.owned.filter(id=>validIds.includes(id));
   if(!save.owned.includes('classic'))save.owned.unshift('classic');
@@ -918,6 +1255,8 @@
   /* ── GAME STATE ── */
   let selectedMode='classic',selectedMap=0;
   let gameMode='classic',mapIndex=0;
+  let aimAssistActive=false;
+  let advCurrentLevel=0,enemies=[],advGoalProgress=0,advLives=1,advLivesLost=0,advEnemyTick=0,advBonusCollected=0;
   let snake,prevSnake,dir,nextDir;
   let snake2,prevSnake2,dir2,nextDir2,score2;
   let obstacles=[],food,bonus;
@@ -1166,7 +1505,9 @@
       const t=paused?1:Math.min(1,(ts-lastStepTime)/speed);
       drawGrid();drawObstacles();updateParticles(dt);
       drawFood(ts);drawBonus(ts);drawFieldPU(ts);
+      if(gameMode==='adventure')drawEnemies(t,ts);
       drawOneSnake(snake,prevSnake,dir,getSkin(),t,ts);
+      drawAimAssist();drawBorder(ts);
       if(gameMode==='multi')drawOneSnake(snake2,prevSnake2,dir2,P2_DEF,t,ts,true);
       if(gameMode==='countdown'){
         const rem=Math.max(0,COUNTDOWN_SECS-(Date.now()-gameStartTime)/1000);
@@ -1197,7 +1538,9 @@
       if(isP2)score2+=pts;else score+=pts;
       let cg=level;
       if(!isP2&&(sk.id==='nature'||sk.id==='ibis'))cg=Math.round(cg*1.25);
-      save.coins+=cg;save.stats.food++;gameFood++;
+      if(!isP2)gainCoins(cg);else save.coins+=cg;
+      save.stats.food++;gameFood++;
+      if(!isP2&&gameMode==='adventure')advGoalProgress++;
       isP2?SFX.p2eat():SFX.eat();
       if(!isP2)emitP(sk.id,head.x,head.y,4);
       food=randomCell([...snake,...(snake2||[])]);
@@ -1231,7 +1574,10 @@
       score+=pts;
       let cg=5*level;if(sk.id==='nature'||sk.id==='ibis')cg=Math.round(cg*1.25);
       if(sk.id==='champion')cg=Math.round(cg*1.5);
-      save.coins+=cg;save.stats.bonus++;bonus=null;SFX.bonus();
+      if(!isP2)gainCoins(cg);else save.coins+=cg;
+      save.stats.bonus++;bonus=null;
+      if(gameMode==='adventure')advBonusCollected++;
+      SFX.bonus();
       emitP(sk.id,head.x,head.y,8);
       if(score>save.highscore){if(!save.stats.beatHS){startConfetti();save.stats.beatHS=true;}save.highscore=score;}
       writeSave(save);checkAch();updateUI();
@@ -1243,6 +1589,11 @@
   }
   function doStep(){
     if(paused)return;
+    if(gameMode==='adventure'){
+      moveEnemies();
+      // Check enemy collision with head (after move)
+      if(enemies.some(en=>en.x===snake[0].x&&en.y===snake[0].y))return advGameOver();
+    }
     if(gameMode==='countdown'&&Date.now()-gameStartTime>=COUNTDOWN_SECS*1000)return gameOver();
     prevSnake=snake.map(s=>({...s}));lastStepTime=performance.now();dir={...nextDir};
     const h1={x:snake[0].x+dir.x,y:snake[0].y+dir.y};
@@ -1255,9 +1606,17 @@
       snake.unshift(h1);snake2.unshift(h2);
       if(!tryEat(h1,snake,false))snake.pop();if(!tryEat(h2,snake2,true))snake2.pop();return;
     }
-    if(wrapOrKill(h1)||selfCol(h1,snake))return gameOver();
+    if(wrapOrKill(h1)||selfCol(h1,snake)){
+      if(gameMode==='adventure')return advGameOver();
+      return gameOver();
+    }
+    if(enemies.some(e=>e.x===h1.x&&e.y===h1.y)){
+      if(gameMode==='adventure')return advGameOver();
+      return gameOver();
+    }
     emitP(getSkin().id,snake[snake.length-1].x,snake[snake.length-1].y,1);
     snake.unshift(h1);if(!tryEat(h1,snake,false))snake.pop();
+    if(gameMode==='adventure'){checkAdvGoal();updateAdvHUD();}
   }
   function endMulti(winner){
     state='gameover';clearInterval(stepInterval);if(rafId){cancelAnimationFrame(rafId);rafId=null;}
@@ -1292,6 +1651,13 @@
   function startGame(){
     clearInterval(stepInterval);if(rafId){cancelAnimationFrame(rafId);rafId=null;}
     if(goAnimRAF){cancelAnimationFrame(goAnimRAF);goAnimRAF=null;}
+    if(gameMode==='adventure'){
+      startAdventure(advCurrentLevel);return;
+    }
+    document.getElementById('mode-tabs').style.display='';
+    document.getElementById('map-tabs').style.display='';
+    document.getElementById('hud-goal').style.display='none';
+    document.getElementById('hud-lives').style.display='none';
     const nv=document.getElementById('name-input').value.trim();
     if(nv){save.name=nv;writeSave(save);}
     initGame();lastStepTime=performance.now();
@@ -1450,6 +1816,217 @@
     document.getElementById('lb-overlay').classList.add('open');
   }
 
+  /* ── APPLY SCORE BOOSTER TO COIN GAINS ── */
+  function gainCoins(n){
+    const boosted=Date.now()<save.scoreBoostExpiry?Math.ceil(n*1.25):n;
+    save.coins+=boosted;return boosted;
+  }
+
+  /* ── ADVENTURE MODE ── */
+  function getAdvXPLevel(xp){
+    for(let i=ADV_XP_THRESHOLDS.length-1;i>=0;i--){if(xp>=ADV_XP_THRESHOLDS[i])return i+1;}return 1;
+  }
+  function renderAdvSelect(){
+    const grid=document.getElementById('level-grid');grid.innerHTML='';
+    const xp=save.xp||0;
+    const lvl=getAdvXPLevel(xp);
+    const nextXP=ADV_XP_THRESHOLDS[Math.min(lvl,ADV_XP_THRESHOLDS.length-1)];
+    const prevXP=ADV_XP_THRESHOLDS[lvl-1]||0;
+    const pct=nextXP>prevXP?Math.round((xp-prevXP)/(nextXP-prevXP)*100):100;
+    document.getElementById('adv-xp-level').textContent='Adventurer Lv.'+lvl;
+    document.getElementById('adv-xp-val').textContent=xp+' / '+nextXP+' XP';
+    document.getElementById('adv-xp-fill').style.width=pct+'%';
+    ADV_LEVELS.forEach((lvData,idx)=>{
+      const prog=save.advProgress[lvData.id]||{};
+      const unlocked=idx===0||(save.advProgress[ADV_LEVELS[idx-1].id]||{}).completed;
+      const card=document.createElement('div');
+      card.className='lv-card'+(unlocked?'':' lv-locked')+(prog.completed?' lv-done':'');
+      const stars=prog.stars||0;
+      const starStr=(s)=>(s>=1?'⭐':'☆')+(s>=2?'⭐':'☆')+(s>=3?'⭐':'☆');
+      card.innerHTML=`<div class="lv-emoji">${lvData.emoji}</div>`+
+        `<div class="lv-num">Lv.${lvData.id}</div>`+
+        `<div class="lv-name">${lvData.name}</div>`+
+        `<div class="lv-stars">${unlocked?starStr(stars):'🔒'}</div>`;
+      if(unlocked)card.addEventListener('click',()=>startAdventure(idx));
+      grid.appendChild(card);
+    });
+  }
+  function startAdventure(levelIdx){
+    advCurrentLevel=levelIdx;
+    gameMode='adventure';
+    selectedMode='adventure';
+    clearInterval(stepInterval);if(rafId){cancelAnimationFrame(rafId);rafId=null;}
+    if(goAnimRAF){cancelAnimationFrame(goAnimRAF);goAnimRAF=null;}
+    showScreen('game-screen');stopMenuAnim();
+    document.getElementById('mode-tabs').style.display='none';
+    document.getElementById('map-tabs').style.display='none';
+    initAdvGame();
+    lastStepTime=performance.now();
+    stepInterval=setInterval(doStep,speed);
+    rafId=requestAnimationFrame(renderLoop);
+    updateMsg('&#127891; '+ADV_LEVELS[levelIdx].name+' — '+ADV_LEVELS[levelIdx].goal.label);
+  }
+  function initAdvGame(){
+    const lv=ADV_LEVELS[advCurrentLevel];
+    obstacles=lv.walls;
+    snake=[{x:6,y:12},{x:5,y:12},{x:4,y:12}];prevSnake=snake.map(s=>({...s}));
+    dir={x:1,y:0};nextDir={x:1,y:0};
+    food=randomCell([...snake]);bonus=null;fieldPU=null;gameFood=0;particles=[];
+    if(activePU){clearTimeout(activePU.timerId);activePU=null;}
+    // Enemies
+    enemies=lv.enemyDefs.map(d=>({...d,path:d.path?d.path.map(p=>({...p})):[],dir:{x:1,y:0},pathIdx:0,ticks:0}));
+    // Goal progress
+    advGoalProgress=0;advBonusCollected=0;advLivesLost=0;
+    advLives=1+(save.extraLifeCharges>0?1:0);
+    if(save.extraLifeCharges>0){save.extraLifeCharges--;writeSave(save);}
+    // Aim assist
+    aimAssistActive=save.aimAssistCharges>0;
+    if(aimAssistActive){save.aimAssistCharges--;writeSave(save);}
+    _aimCache=null;_aimFood=null;
+    score=0;level=1;speed=lv.speed;state='playing';paused=false;
+    gameStartTime=Date.now();save.stats.beatHS=false;
+    updateUI();updatePauseBtn();refreshPUBar();
+    document.getElementById('hud-timer').style.display='none';
+    document.getElementById('hud-p2score').style.display='none';
+    document.getElementById('hud-goal').style.display='';
+    document.getElementById('hud-lives').style.display='';
+    document.getElementById('hud-goal-label').textContent=lv.goal.label.split(' ').slice(0,2).join(' ');
+    document.getElementById('btn-start').textContent='Restart';
+    document.getElementById('btn-share').style.display='none';
+    document.getElementById('hud-skin-icon').innerHTML=getSkin().emoji;
+    updateAdvHUD();
+  }
+  function updateAdvHUD(){
+    if(gameMode!=='adventure')return;
+    const lv=ADV_LEVELS[advCurrentLevel];
+    const goal=lv.goal;
+    let cur=0,max=goal.value;
+    if(goal.type==='food')cur=advGoalProgress;
+    else if(goal.type==='score')cur=score;
+    else if(goal.type==='survive')cur=Math.min(max,Math.floor((Date.now()-gameStartTime)/1000));
+    else if(goal.type==='bonus')cur=advBonusCollected;
+    document.getElementById('hud-goal-val').textContent=cur+'/'+max;
+    const pct=Math.min(100,Math.round(cur/max*100));
+    document.getElementById('hud-goal-fill').style.width=pct+'%';
+    const livesTxt='💚'.repeat(advLives)||'💔';
+    document.getElementById('hud-lives-val').textContent=livesTxt;
+  }
+  function moveEnemies(){
+    enemies.forEach(en=>{
+      en.ticks++;if(en.ticks<en.tickRate)return;en.ticks=0;
+      if(en.type==='patrol'&&en.path.length>=2){
+        const tgt=en.path[en.pathIdx%2];
+        const dx=tgt.x-en.x,dy=tgt.y-en.y;
+        if(dx===0&&dy===0){en.pathIdx=(en.pathIdx+1)%2;}
+        else{
+          const mx=dx===0?0:dx>0?1:-1,my=dy===0?0:dy>0?1:-1;
+          en.x+=mx;en.y+=my;en.dir={x:mx,y:my};
+        }
+      } else if(en.type==='chase'){
+        const dx=snake[0].x-en.x,dy=snake[0].y-en.y;
+        if(Math.abs(dx)>=Math.abs(dy)){en.x+=dx>0?1:dx<0?-1:0;en.dir={x:dx>0?1:-1,y:0};}
+        else{en.y+=dy>0?1:dy<0?-1:0;en.dir={x:0,y:dy>0?1:-1};}
+      }
+    });
+  }
+  function drawEnemies(t,ts){
+    enemies.forEach(en=>{
+      const px=en.x*GRID,py=en.y*GRID;
+      const cx2=px+GRID/2,cy2=py+GRID/2;
+      const pulse=1+.14*Math.sin(ts*.009+en.x*.3+en.y*.5);
+      ctx.save();
+      ctx.fillStyle='#e94560';ctx.shadowColor='#e94560';ctx.shadowBlur=9;
+      ctx.beginPath();ctx.arc(cx2,cy2,(GRID/2-3)*pulse,0,PI2);ctx.fill();
+      ctx.shadowBlur=0;
+      // eye
+      const ex2=cx2+(en.dir?.x||0)*2.5,ey2=cy2+(en.dir?.y||0)*2.5-1.5;
+      ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(ex2,ey2,3,0,PI2);ctx.fill();
+      ctx.fillStyle='#111';ctx.beginPath();ctx.arc(ex2+(en.dir?.x||0),ey2+(en.dir?.y||0),1.5,0,PI2);ctx.fill();
+      ctx.restore();
+    });
+  }
+  function checkAdvGoal(){
+    const lv=ADV_LEVELS[advCurrentLevel];const goal=lv.goal;
+    let done=false;
+    if(goal.type==='food'&&advGoalProgress>=goal.value)done=true;
+    if(goal.type==='score'&&score>=goal.value)done=true;
+    if(goal.type==='survive'&&(Date.now()-gameStartTime)>=goal.value*1000)done=true;
+    if(goal.type==='bonus'&&advBonusCollected>=goal.value)done=true;
+    if(done)advLevelComplete();
+  }
+  function advLevelComplete(){
+    state='gameover';
+    clearInterval(stepInterval);if(rafId){cancelAnimationFrame(rafId);rafId=null;}
+    if(goAnimRAF){cancelAnimationFrame(goAnimRAF);goAnimRAF=null;}
+    if(activePU){clearTimeout(activePU.timerId);activePU=null;}
+    const lv=ADV_LEVELS[advCurrentLevel];
+    const elapsed=(Date.now()-gameStartTime)/1000;
+    // Stars
+    const star1=true;
+    const star2=elapsed<=lv.starTime;
+    const star3=advLivesLost===0;
+    const stars=[star1,star2,star3].filter(Boolean).length;
+    // Rewards
+    const xpGain=Math.round(lv.xpReward*(Date.now()<save.xpBoostExpiry?2:1));
+    const prog=save.advProgress[lv.id]||{};
+    const isFirst=!prog.completed;
+    const bonusCoins=isFirst?lv.coinReward:Math.round(lv.coinReward*.3);
+    const earned=gainCoins(bonusCoins);
+    save.xp=(save.xp||0)+xpGain;
+    const prevStars=prog.stars||0;
+    save.advProgress[lv.id]={completed:true,stars:Math.max(stars,prevStars),time:elapsed,firstClear:prog.firstClear||isFirst};
+    writeSave(save);checkAch();
+    // Show overlay
+    const starsHtml=(stars>=1?'⭐':'☆')+(stars>=2?'⭐':'☆')+(stars>=3?'⭐':'☆');
+    document.getElementById('lc-badge').textContent='LEVEL '+lv.id+' COMPLETE';
+    document.getElementById('lc-stars').textContent=starsHtml;
+    document.getElementById('lc-coins').textContent=(isFirst?'+':'+~')+earned;
+    document.getElementById('lc-coins').textContent='+'+earned;
+    document.getElementById('lc-xp').textContent='+'+xpGain;
+    document.getElementById('lc-score-val').textContent=score;
+    const starDescs=[
+      {desc:lv.goal.label,earned:star1},
+      {desc:'Finish in '+lv.starTime+'s (took '+Math.ceil(elapsed)+'s)',earned:star2},
+      {desc:'No lives lost',earned:star3},
+    ];
+    document.getElementById('lc-star-list').innerHTML=starDescs.map(s=>
+      `<div class="lc-star-item${s.earned?' earned':''}">`+
+      `<span>${s.earned?'⭐':'☆'}</span><span>${s.desc}</span></div>`
+    ).join('');
+    const hasNext=advCurrentLevel<ADV_LEVELS.length-1;
+    document.getElementById('lc-next').style.display=hasNext?'':'none';
+    document.getElementById('lc-overlay').classList.add('open');
+    SFX.levelup();startConfetti();
+  }
+  function advGameOver(){
+    if(advLives>1){
+      advLives--;advLivesLost++;
+      // Respawn snake at start
+      snake=[{x:6,y:12},{x:5,y:12},{x:4,y:12}];prevSnake=snake.map(s=>({...s}));
+      dir={x:1,y:0};nextDir={x:1,y:0};
+      if(activePU){clearTimeout(activePU.timerId);activePU=null;}
+      state='playing';paused=false;
+      updateMsg('&#128154; Life lost! '+advLives+' remaining');
+      updateAdvHUD();return;
+    }
+    // True game over
+    state='gameover';clearInterval(stepInterval);if(rafId){cancelAnimationFrame(rafId);rafId=null;}
+    if(goAnimRAF){cancelAnimationFrame(goAnimRAF);goAnimRAF=null;}
+    if(activePU){clearTimeout(activePU.timerId);activePU=null;}
+    const lv=ADV_LEVELS[advCurrentLevel];
+    drawGrid();drawObstacles();drawFood();drawBonus();
+    drawEnemies(1,performance.now());
+    drawOneSnake(snake,prevSnake,dir,getSkin(),1,performance.now());
+    playGameOverAnim(snake[0]);
+    updateMsg('Game over! Goal: '+lv.goal.label);
+    document.getElementById('btn-start').textContent='Retry';
+    document.getElementById('btn-share').style.display='none';
+    updatePauseBtn();
+    setTimeout(()=>{
+      if(state==='gameover')renderAdvSelect();
+    },3000);
+  }
+
   /* ── SHOP ── */
   let spRAF=null;
   const spData=[];
@@ -1573,6 +2150,104 @@
         save.coins-=1000;save.titleUnlocked=true;writeSave(save);updateUI();renderShop();
       };
     }
+
+    // ── Power-Ups & Boosts ──
+    const puGrid=document.getElementById('shop-pu-grid');puGrid.innerHTML='';
+    SHOP_POWERUPS.forEach(pu=>{
+      const card=document.createElement('div');card.className='pu-card';
+      let statusHtml='';let priceHtml=`<span class="pu-price">&#129689; ${pu.price.toLocaleString()}</span>`;
+      if(pu.type==='timed'){
+        const expiry=pu.id==='scoreboost'?save.scoreBoostExpiry:save.xpBoostExpiry;
+        if(expiry>Date.now()){
+          const rem=Math.ceil((expiry-Date.now())/60000);
+          statusHtml=`<div class="booster-active">&#9989; Active &mdash; ${rem}m left</div>`;
+        }
+      } else if(pu.type==='charge'){
+        const cnt=pu.id==='extralives'?save.extraLifeCharges:save.aimAssistCharges;
+        if(cnt>0)statusHtml=`<div class="booster-active">&#9989; ${cnt} charge${cnt!==1?'s':''} ready</div>`;
+      }
+      card.innerHTML=statusHtml+
+        `<div class="pu-header"><span class="pu-icon">${pu.icon}</span><span class="pu-name">${pu.name}</span></div>`+
+        `<div class="pu-desc">${pu.desc}</div>`+
+        `<div class="pu-footer">${priceHtml}<span class="pu-status" id="pu-st-${pu.id}"></span></div>`;
+      card.addEventListener('click',()=>{
+        if(save.coins<pu.price){alert('Not enough coins!');return;}
+        save.coins-=pu.price;
+        if(pu.type==='charge'){
+          if(pu.id==='extralives')save.extraLifeCharges++;
+          else save.aimAssistCharges++;
+        } else if(pu.type==='timed'){
+          const now=Date.now();
+          if(pu.id==='scoreboost')save.scoreBoostExpiry=Math.max(save.scoreBoostExpiry,now)+pu.dur;
+          else save.xpBoostExpiry=Math.max(save.xpBoostExpiry,now)+pu.dur;
+        } else if(pu.id==='mysterybox'){
+          openMysteryBox();
+        }
+        writeSave(save);updateUI();renderShop();
+      });
+      puGrid.appendChild(card);
+    });
+
+    // ── Music ──
+    const musicGrid=document.getElementById('shop-music-grid');musicGrid.innerHTML='';
+    MUSIC_TRACKS.forEach(trk=>{
+      const owned=save.ownedMusic.includes(trk.id);
+      const active=save.activeMusic===trk.id;
+      const card=document.createElement('div');
+      card.className='music-card'+(active?' music-active':'')+(!owned?' music-locked':'');
+      const badge=!owned?`<div class="music-price">&#129689;${trk.price.toLocaleString()}</div>`
+        :(active?`<div class="music-price" style="color:var(--accent)">&#9654; Playing</div>`
+          :`<div class="music-price" style="color:var(--sub)">Owned</div>`);
+      card.innerHTML=`<div class="music-icon">${trk.icon}</div><div class="music-name">${trk.name}</div>${badge}`;
+      if(owned&&!active){
+        card.addEventListener('click',()=>{startMusic(trk.id);renderShop();});
+      } else if(!owned){
+        card.addEventListener('click',()=>{
+          if(save.coins<trk.price){alert('Not enough coins!');return;}
+          save.coins-=trk.price;save.ownedMusic.push(trk.id);
+          writeSave(save);updateUI();renderShop();
+        });
+      }
+      musicGrid.appendChild(card);
+    });
+
+    // ── Borders ──
+    const borderGrid=document.getElementById('shop-border-grid');borderGrid.innerHTML='';
+    BORDERS_LIST.forEach(bd=>{
+      const owned=save.ownedBorders.includes(bd.id);
+      const active=save.activeBorder===bd.id;
+      const card=document.createElement('div');
+      card.className='border-card'+(active?' border-active':'')+(!owned?' border-locked':'');
+      const badge=!owned?`<div class="border-price">&#129689;${bd.price.toLocaleString()}</div>`
+        :(active?`<div class="border-price" style="color:var(--accent)">Active</div>`
+          :`<div class="border-price" style="color:var(--sub)">Owned</div>`);
+      card.innerHTML=`<div class="border-icon">${bd.icon}</div><div class="border-name">${bd.name}</div>${badge}`;
+      if(owned&&!active){
+        card.addEventListener('click',()=>{save.activeBorder=bd.id;writeSave(save);renderShop();});
+      } else if(!owned){
+        card.addEventListener('click',()=>{
+          if(save.coins<bd.price){alert('Not enough coins!');return;}
+          save.coins-=bd.price;save.ownedBorders.push(bd.id);save.activeBorder=bd.id;
+          writeSave(save);updateUI();renderShop();
+        });
+      }
+      borderGrid.appendChild(card);
+    });
+  }
+
+  /* ── MYSTERY BOX ── */
+  function openMysteryBox(){
+    const pool=[];
+    SKINS.filter(s=>s.price>0&&!s.unlockHint&&!save.owned.includes(s.id)).forEach(s=>pool.push({type:'skin',id:s.id,name:s.name,emoji:s.emoji}));
+    BACKGROUNDS.filter(b=>b.price>0&&!save.ownedBgs.includes(b.id)).forEach(b=>pool.push({type:'bg',id:b.id,name:b.name}));
+    GAMEOVER_ANIMS.filter(a=>a.price>0&&!save.ownedAnims.includes(a.id)).forEach(a=>pool.push({type:'anim',id:a.id,name:a.name}));
+    if(!pool.length){save.coins+=5000;writeSave(save);alert('🎰 Mystery Box: No new items — here are 5,000 coins instead!');return;}
+    const prize=pool[Math.floor(Math.random()*pool.length)];
+    if(prize.type==='skin'){save.owned.push(prize.id);save.skin=prize.id;}
+    else if(prize.type==='bg'){save.ownedBgs.push(prize.id);save.bg=prize.id;}
+    else if(prize.type==='anim'){save.ownedAnims.push(prize.id);save.gameOverAnim=prize.id;}
+    writeSave(save);updateMenuSkin();
+    alert('🎰 Mystery Box: You got '+prize.name+'! '+(prize.emoji||'🎁'));
   }
 
   /* ── ACHIEVEMENTS ── */
@@ -1631,6 +2306,24 @@
     document.getElementById('btn-theme-game').textContent=t;
   }
   document.getElementById('btn-play').addEventListener('click',goToGame);
+  document.getElementById('btn-adventure').addEventListener('click',()=>{
+    renderAdvSelect();showScreen('adv-screen');stopMenuAnim();
+  });
+  document.getElementById('adv-back-btn').addEventListener('click',()=>{goToMenu();});
+  // Level complete buttons
+  document.getElementById('lc-retry').addEventListener('click',()=>{
+    document.getElementById('lc-overlay').classList.remove('open');
+    startGame();
+  });
+  document.getElementById('lc-next').addEventListener('click',()=>{
+    document.getElementById('lc-overlay').classList.remove('open');
+    if(advCurrentLevel<ADV_LEVELS.length-1){advCurrentLevel++;startAdventure(advCurrentLevel);}
+    else{renderAdvSelect();showScreen('adv-screen');}
+  });
+  document.getElementById('lc-select').addEventListener('click',()=>{
+    document.getElementById('lc-overlay').classList.remove('open');
+    renderAdvSelect();showScreen('adv-screen');
+  });
   document.getElementById('menu-shop').addEventListener('click',async()=>{
     await checkChampionStatus();renderShop();document.getElementById('shop-overlay').classList.add('open');
   });
@@ -1642,6 +2335,13 @@
   document.getElementById('btn-share').addEventListener('click',shareScore);
   document.getElementById('btn-back').addEventListener('click',()=>{
     clearInterval(stepInterval);if(rafId){cancelAnimationFrame(rafId);rafId=null;}
+    if(goAnimRAF){cancelAnimationFrame(goAnimRAF);goAnimRAF=null;}
+    document.getElementById('lc-overlay').classList.remove('open');
+    document.getElementById('mode-tabs').style.display='';
+    document.getElementById('map-tabs').style.display='';
+    document.getElementById('hud-goal').style.display='none';
+    document.getElementById('hud-lives').style.display='none';
+    gameMode='classic';enemies=[];aimAssistActive=false;
     state='idle';goToMenu();
   });
   document.getElementById('btn-theme-game').addEventListener('click',()=>setTheme(!dayMode));
@@ -1704,6 +2404,7 @@
   ctx.fillStyle='#4ecca3';ctx.font='bold 18px system-ui';
   ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('Press Start to play',W/2,H/2);
   startMenuAnim();updateMenuSkin();
+  if(save.activeMusic&&save.activeMusic!=='silent')startMusic(save.activeMusic);
   </script>
 </body>
 </html>
