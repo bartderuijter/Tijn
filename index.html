@@ -1052,16 +1052,16 @@
        {x:12,y:20,path:[{x:8,y:20},{x:16,y:20}],type:'patrol',tickRate:3}],
      starTime:120,coinReward:2000,xpReward:300},
     {id:10,name:'Final Boss',emoji:'👑',
-     goal:{type:'score',value:1000,label:'Score 1000'},
-     speed:80,
-     walls:(()=>{const w=[];for(let x=4;x<=20;x++)if(x<8||x>16){w.push({x,y:6});w.push({x,y:18});}for(let y=7;y<=17;y++)if(y<9||y>15){w.push({x:4,y});w.push({x:20,y});}return w;})(),
+     goal:{type:'score',value:600,label:'Score 600'},
+     speed:95,
+     walls:(()=>{const w=[];for(let x=3;x<=21;x++)if(x<7||x>17){w.push({x,y:5});w.push({x,y:19});}for(let y=6;y<=18;y++)if(y<8||y>16){w.push({x:3,y});w.push({x:21,y});}return w;})(),
      enemyDefs:[
-       {x:12,y:3,path:[{x:9,y:3},{x:15,y:3}],type:'patrol',tickRate:3},
-       {x:2,y:12,path:[{x:2,y:9},{x:2,y:15}],type:'patrol',tickRate:3},
-       {x:22,y:12,path:[{x:22,y:9},{x:22,y:15}],type:'patrol',tickRate:3},
-       {x:12,y:21,path:[{x:9,y:21},{x:15,y:21}],type:'patrol',tickRate:3},
-       {x:12,y:12,path:[],type:'chase',tickRate:5}],
-     starTime:150,coinReward:3000,xpReward:500},
+       {x:12,y:2, path:[{x:8,y:2},{x:16,y:2}], type:'patrol',tickRate:4},
+       {x:1,y:12, path:[{x:1,y:8},{x:1,y:16}],  type:'patrol',tickRate:4},
+       {x:23,y:12,path:[{x:23,y:8},{x:23,y:16}],type:'patrol',tickRate:4},
+       {x:12,y:22,path:[{x:8,y:22},{x:16,y:22}],type:'patrol',tickRate:4},
+       {x:12,y:12,path:[],type:'chase',tickRate:8}],
+     starTime:120,coinReward:3000,xpReward:500},
   ];
   const ADV_XP_THRESHOLDS=[0,100,250,500,1000,2000,4000,7000,12000,20000,35000];
 
