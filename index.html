@@ -174,6 +174,38 @@
     .ach-info{flex:1;}
     .ach-name{font-size:.78rem;font-weight:700;color:var(--text);}
     .ach-desc{font-size:.66rem;color:var(--sub);}
+    /* SHOP SECTIONS */
+    .shop-section-title{font-size:.72rem;font-weight:800;color:var(--sub);text-transform:uppercase;
+      letter-spacing:2px;margin:14px 0 7px;padding-left:2px;}
+    .bg-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:4px;}
+    .bg-swatch{border-radius:8px;height:52px;cursor:pointer;border:2px solid var(--border);
+      display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+      padding-bottom:4px;transition:border-color .15s,transform .12s;position:relative;}
+    .bg-swatch:hover{border-color:var(--accent);transform:scale(1.06);}
+    .bg-swatch.selected{border-color:var(--accent);box-shadow:0 0 10px rgba(78,204,163,.45);}
+    .bg-swatch.locked{opacity:.6;cursor:default;}
+    .bg-swatch.locked:hover{border-color:var(--border);transform:none;}
+    .bg-swatch-name{font-size:.52rem;font-weight:700;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.9);}
+    .bg-swatch-price{font-size:.46rem;color:#ffcc66;}
+    .anim-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:4px;}
+    .anim-card{background:var(--card);border:2px solid var(--border);border-radius:10px;
+      padding:9px;display:flex;flex-direction:column;align-items:center;gap:4px;
+      cursor:pointer;transition:border-color .15s,transform .12s;}
+    .anim-card:hover{border-color:var(--accent);transform:translateY(-2px);}
+    .anim-card.selected{border-color:var(--accent);box-shadow:0 0 12px rgba(78,204,163,.35);}
+    .anim-card.locked{opacity:.6;cursor:default;}
+    .anim-card.locked:hover{border-color:var(--border);transform:none;}
+    .anim-name{font-size:.7rem;font-weight:700;color:var(--text);}
+    .anim-desc{font-size:.58rem;color:var(--sub);text-align:center;}
+    .anim-badge{font-size:.56rem;padding:2px 7px;border-radius:7px;font-weight:700;}
+    .title-section{background:var(--card);border:1.5px solid var(--border);border-radius:10px;
+      padding:10px 12px;margin-bottom:4px;}
+    .title-row{display:flex;gap:7px;align-items:center;margin-top:6px;}
+    .title-inp{flex:1;background:var(--cbg);border:2px solid var(--border);border-radius:7px;
+      color:var(--text);font-family:inherit;font-size:.8rem;padding:5px 10px;
+      outline:none;transition:border-color .2s;}
+    .title-inp:focus{border-color:var(--accent);}
+    .lb-title{font-size:.59rem;color:var(--sub);font-style:italic;margin-top:1px;}
     /* GLOBAL LEADERBOARD */
     .lb-global-header{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:.74rem;color:var(--sub);}
     .lb-live-dot{width:8px;height:8px;border-radius:50%;background:#4ecca3;flex-shrink:0;
@@ -274,6 +306,25 @@
         &#129689; Coins: <strong id="shop-coins">0</strong>
       </div>
       <div id="skin-grid"></div>
+      <div class="shop-section-title">&#127749; Background Color</div>
+      <div class="bg-grid" id="shop-bg-grid"></div>
+      <div class="shop-section-title">&#128165; Game Over Effect</div>
+      <div class="anim-grid" id="shop-anim-grid"></div>
+      <div class="shop-section-title">&#127991; Leaderboard Title</div>
+      <div class="title-section" id="shop-title-section">
+        <div id="shop-title-locked" style="font-size:.75rem;color:var(--sub)">
+          Unlock a custom title shown under your name on the leaderboard &mdash;
+          <strong style="color:var(--coin)">&#129689; 1,000 coins</strong>
+        </div>
+        <div id="shop-title-owned" style="display:none">
+          <div style="font-size:.72rem;color:var(--sub);margin-bottom:2px">Your title (max 15 chars)</div>
+          <div class="title-row">
+            <input class="title-inp" id="title-inp" type="text" maxlength="15" placeholder="e.g. Snake Master">
+            <button class="btn" id="title-save-btn" style="white-space:nowrap;font-size:.7rem;padding:.3rem .8rem">Save</button>
+          </div>
+        </div>
+        <div style="margin-top:6px"><button class="btn" id="title-unlock-btn" style="font-size:.7rem;padding:.3rem 1rem">&#129689; Unlock for 1,000</button></div>
+      </div>
       <button class="btn modal-close" id="shop-close">Close</button>
     </div>
   </div>
@@ -646,6 +697,27 @@
       }
     },
   ];
+  /* ── BACKGROUNDS ── */
+  const BACKGROUNDS=[
+    {id:'dark',    name:'Dark',        color:'#0d0d1a', gridColor:'#1a1a35', price:0},
+    {id:'navy',    name:'Dark Blue',   color:'#050520', gridColor:'#0e0e3a', price:500},
+    {id:'emerald', name:'Dark Green',  color:'#041208', gridColor:'#0a2010', price:500},
+    {id:'violet',  name:'Dark Purple', color:'#0e0820', gridColor:'#1e1035', price:500},
+    {id:'crimson', name:'Dark Red',    color:'#180404', gridColor:'#2a0a0a', price:500},
+    {id:'slate',   name:'Grey',        color:'#111118', gridColor:'#1e1e28', price:500},
+    {id:'midnight',name:'Midnight',    color:'#02020e', gridColor:'#0a0a1e', price:500},
+    {id:'forest',  name:'Forest',      color:'#060e06', gridColor:'#0e1e0e', price:500},
+  ];
+
+  /* ── GAME-OVER ANIMATIONS ── */
+  const GAMEOVER_ANIMS=[
+    {id:'classic',   name:'Classic',   icon:'&#128308;', desc:'Red overlay',              price:0},
+    {id:'explosion', name:'Explosion', icon:'&#128165;', desc:'Particle blast',            price:5000},
+    {id:'shatter',   name:'Shatter',   icon:'&#10052;',  desc:'Screen shatters to pieces', price:5000},
+    {id:'blackhole', name:'Blackhole', icon:'&#11044;',  desc:'Vortex pulls you in',       price:7500},
+    {id:'glitch',    name:'Glitch',    icon:'&#127918;', desc:'Reality breaks down',       price:7500},
+  ];
+
   const P2_DEF={id:'p2',emoji:'&#128101;',eyeColor:'#ffffff',beak:false,drawExtra:null,
     drawSeg(c,px,py,g,i,len,ts,isH,al){
       const pad=2;c.globalAlpha=al;c.fillStyle=isH?'#7799ff':'#3355cc';
@@ -692,28 +764,37 @@
 
   /* ── ACHIEVEMENTS ── */
   const ACHIEVEMENTS=[
-    {id:'eat10',   icon:'&#127822;',name:'Snack Bar',   desc:'Eat 10 food items total'},
-    {id:'eat50',   icon:'&#127869;&#65039;',name:'Glutton',desc:'Eat 50 food items total'},
-    {id:'survive5',icon:'&#9200;',  name:'Veteran',      desc:'Survive 5 minutes in one game'},
-    {id:'level5',  icon:'&#128640;',name:'Speed Demon',  desc:'Reach level 5'},
-    {id:'bonus10', icon:'&#11088;', name:'Star Hunter',  desc:'Collect 10 bonus stars'},
-    {id:'pu5',     icon:'&#9889;',  name:'Power Player', desc:'Use 5 power-ups'},
-    {id:'score500',icon:'&#128175;',name:'Five Hundred', desc:'Score 500 points in one game'},
-    {id:'hs',      icon:'&#128081;',name:'Legend',       desc:'Beat your own high score'},
+    {id:'eat10',    icon:'&#127822;',name:'Snack Bar',   desc:'Eat 10 food items total'},
+    {id:'eat50',    icon:'&#127869;&#65039;',name:'Glutton',desc:'Eat 50 food items total'},
+    {id:'survive5', icon:'&#9200;',  name:'Veteran',      desc:'Survive 5 minutes in one game'},
+    {id:'level5',   icon:'&#128640;',name:'Speed Demon',  desc:'Reach level 5'},
+    {id:'bonus10',  icon:'&#11088;', name:'Star Hunter',  desc:'Collect 10 bonus stars'},
+    {id:'pu5',      icon:'&#9889;',  name:'Power Player', desc:'Use 5 power-ups'},
+    {id:'score500', icon:'&#128175;',name:'Five Hundred', desc:'Score 500 points in one game'},
+    {id:'hs',       icon:'&#128081;',name:'Legend',       desc:'Beat your own high score'},
+    {id:'centurion',icon:'&#127963;&#65039;',name:'Centurion',desc:'Reach a score of 100,000'},
+    {id:'untouched',icon:'&#128737;&#65039;',name:'Untouchable',desc:'Survive 10 minutes in one game'},
+    {id:'shopaholic',icon:'&#128717;&#65039;',name:'Shopaholic',desc:'Buy all available skins'},
   ];
   function checkAch(){
     let nu=false;
     ACHIEVEMENTS.forEach(a=>{
       if(save.achievements.includes(a.id))return;
       let ok=false;
-      if(a.id==='eat10'   &&save.stats.food>=10)     ok=true;
-      if(a.id==='eat50'   &&save.stats.food>=50)     ok=true;
-      if(a.id==='survive5'&&save.stats.maxTime>=300) ok=true;
-      if(a.id==='level5'  &&save.stats.maxLevel>=5)  ok=true;
-      if(a.id==='bonus10' &&save.stats.bonus>=10)    ok=true;
-      if(a.id==='pu5'     &&save.stats.powerups>=5)  ok=true;
-      if(a.id==='score500'&&score>=500)              ok=true;
-      if(a.id==='hs'      &&save.stats.beatHS)       ok=true;
+      if(a.id==='eat10'    &&save.stats.food>=10)     ok=true;
+      if(a.id==='eat50'    &&save.stats.food>=50)     ok=true;
+      if(a.id==='survive5' &&save.stats.maxTime>=300) ok=true;
+      if(a.id==='level5'   &&save.stats.maxLevel>=5)  ok=true;
+      if(a.id==='bonus10'  &&save.stats.bonus>=10)    ok=true;
+      if(a.id==='pu5'      &&save.stats.powerups>=5)  ok=true;
+      if(a.id==='score500' &&score>=500)              ok=true;
+      if(a.id==='hs'       &&save.stats.beatHS)       ok=true;
+      if(a.id==='centurion'&&save.highscore>=100000)  ok=true;
+      if(a.id==='untouched'&&save.stats.maxTime>=600) ok=true;
+      if(a.id==='shopaholic'){
+        const buyable=SKINS.filter(s=>s.price>0&&!s.unlockHint);
+        if(buyable.every(s=>save.owned.includes(s.id)))ok=true;
+      }
       if(ok){save.achievements.push(a.id);nu=true;}
     });
     if(nu){writeSave(save);let t=setTimeout(()=>updateMsg(null),3500);
@@ -756,6 +837,12 @@
   save.leaderboard =save.leaderboard ||[];
   save.achievements=save.achievements||[];
   save.stats       =save.stats       ||{food:0,bonus:0,powerups:0,maxLevel:0,maxTime:0,beatHS:false};
+  save.bg          =save.bg          ||'dark';
+  save.ownedBgs    =save.ownedBgs    ||['dark'];
+  save.gameOverAnim=save.gameOverAnim||'classic';
+  save.ownedAnims  =save.ownedAnims  ||['classic'];
+  save.titleUnlocked=save.titleUnlocked||false;
+  save.title       =save.title       ||'';
   const validIds=SKINS.map(s=>s.id);
   save.owned=save.owned.filter(id=>validIds.includes(id));
   if(!save.owned.includes('classic'))save.owned.unshift('classic');
@@ -884,16 +971,23 @@
 
   /* ── DRAWING ── */
   function lerp(a,b,t){return a+(b-a)*t;}
+  function getFieldBg(){
+    if(dayMode)return T();
+    const bg=BACKGROUNDS.find(b=>b.id===save.bg)||BACKGROUNDS[0];
+    return {bg:bg.color,grid:bg.gridColor,wall:T().wall,wallEdge:T().wallEdge};
+  }
   function drawGrid(){
-    ctx.fillStyle=T().bg;ctx.fillRect(0,0,W,H);
-    ctx.strokeStyle=T().grid;ctx.lineWidth=.4;
+    const ft=getFieldBg();
+    ctx.fillStyle=ft.bg;ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle=ft.grid;ctx.lineWidth=.4;
     for(let x=0;x<=COLS;x++){ctx.beginPath();ctx.moveTo(x*GRID,0);ctx.lineTo(x*GRID,H);ctx.stroke();}
     for(let y=0;y<=ROWS;y++){ctx.beginPath();ctx.moveTo(0,y*GRID);ctx.lineTo(W,y*GRID);ctx.stroke();}
   }
   function drawObstacles(){
+    const ft=getFieldBg();
     obstacles.forEach(o=>{
-      ctx.fillStyle=T().wall;ctx.fillRect(o.x*GRID,o.y*GRID,GRID,GRID);
-      ctx.strokeStyle=T().wallEdge;ctx.lineWidth=1;
+      ctx.fillStyle=ft.wall;ctx.fillRect(o.x*GRID,o.y*GRID,GRID,GRID);
+      ctx.strokeStyle=ft.wallEdge;ctx.lineWidth=1;
       ctx.strokeRect(o.x*GRID+.5,o.y*GRID+.5,GRID-1,GRID-1);
     });
   }
@@ -963,6 +1057,106 @@
     ctx.fillText('\u23f8  PAUSED',W/2,H/2);
     ctx.font='14px system-ui';ctx.fillStyle='#8888aa';
     ctx.fillText('Press Space or Resume to continue',W/2,H/2+38);
+  }
+
+  /* ── GAME-OVER ANIMATIONS ── */
+  let goAnimRAF=null;
+  function playGameOverAnim(headSeg){
+    if(goAnimRAF){cancelAnimationFrame(goAnimRAF);goAnimRAF=null;}
+    const anim=(save.ownedAnims||['classic']).includes(save.gameOverAnim)?save.gameOverAnim:'classic';
+    if(anim==='classic'){
+      ctx.fillStyle='rgba(233,69,96,.22)';ctx.fillRect(0,0,W,H);return;
+    }
+    // Pre-generate anim data
+    const cx=headSeg.x*GRID+GRID/2,cy=headSeg.y*GRID+GRID/2;
+    let goData={};
+    if(anim==='explosion'){
+      goData.particles=[];
+      for(let i=0;i<55;i++){
+        const a=(i/55)*PI2,sp=2+Math.random()*6;
+        goData.particles.push({x:cx,y:cy,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,
+          hue:Math.random()*50,sz:3+Math.random()*5});
+      }
+    } else if(anim==='shatter'){
+      const ts2=25;
+      goData.shards=[];
+      for(let tx=0;tx<Math.ceil(W/ts2);tx++){
+        for(let ty=0;ty<Math.ceil(H/ts2);ty++){
+          const ang=Math.atan2(ty*ts2+ts2/2-H/2,tx*ts2+ts2/2-W/2);
+          goData.shards.push({tx,ty,ang,spd:100+Math.random()*180,
+            spin:(Math.random()-.5)*9,hue:Math.random()*50+320});
+        }
+      }
+    } else if(anim==='glitch'){
+      goData.strips=[];
+      for(let i=0;i<22;i++)goData.strips.push({off:(Math.random()-.5)*44,ph:Math.random()*PI2});
+    }
+    const dur=1500,ts0=performance.now();
+    const TS2=25;
+    function frame(ts){
+      const prog=Math.min(1,(ts-ts0)/dur);
+      drawGrid();drawObstacles();drawFood(ts);drawBonus(ts);
+      drawOneSnake(snake,prevSnake,dir,getSkin(),1,ts);
+      if(anim==='explosion'){
+        goData.particles.forEach(p=>{
+          p.x+=p.vx*(1-prog*.85);p.y+=p.vy*(1-prog*.85);
+          ctx.globalAlpha=Math.max(0,1-prog*1.2);
+          ctx.fillStyle=`hsl(${p.hue},100%,${55+prog*20}%)`;
+          ctx.beginPath();ctx.arc(p.x,p.y,Math.max(.1,p.sz*(1-prog*.75)),0,PI2);ctx.fill();
+        });
+        ctx.globalAlpha=1;
+        for(let r=0;r<3;r++){
+          const rp=Math.max(0,prog-r*.08);
+          if(rp<=0)continue;
+          ctx.strokeStyle=`rgba(255,${150-r*45},0,${Math.max(0,(1-rp*1.4))})`;
+          ctx.lineWidth=3-r;ctx.beginPath();
+          ctx.arc(cx,cy,rp*300,0,PI2);ctx.stroke();
+        }
+      } else if(anim==='shatter'){
+        ctx.globalAlpha=Math.max(0,1-prog*1.6);
+        goData.shards.forEach(s=>{
+          const d=s.spd*prog;
+          ctx.save();
+          ctx.translate(s.tx*TS2+TS2/2+Math.cos(s.ang)*d,s.ty*TS2+TS2/2+Math.sin(s.ang)*d);
+          ctx.rotate(s.spin*prog);
+          ctx.fillStyle=`hsl(${s.hue},75%,55%)`;
+          ctx.fillRect(-TS2/2+1,-TS2/2+1,TS2-2,TS2-2);
+          ctx.restore();
+        });
+        ctx.globalAlpha=1;
+      } else if(anim==='blackhole'){
+        const r=Math.max(1,prog*W*.85);
+        const grd=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,r);
+        grd.addColorStop(0,'rgba(0,0,0,.96)');
+        grd.addColorStop(.4,'rgba(25,0,55,.88)');
+        grd.addColorStop(1,'rgba(0,0,0,0)');
+        ctx.fillStyle=grd;ctx.fillRect(0,0,W,H);
+        ctx.save();ctx.translate(W/2,H/2);
+        for(let i=0;i<7;i++){
+          const rot=prog*Math.PI*4+(i/7)*PI2;
+          ctx.strokeStyle=`rgba(180,0,255,${.55*(1-prog)})`;ctx.lineWidth=2;
+          ctx.beginPath();ctx.arc(0,0,prog*70*(1+i*.15),rot,rot+Math.PI*.5);ctx.stroke();
+        }
+        ctx.restore();
+      } else if(anim==='glitch'){
+        const nSt=goData.strips.length,stH=H/nSt;
+        goData.strips.forEach((s,i)=>{
+          const shift=s.off*(Math.sin(ts*.03+s.ph)>.1?1:.25);
+          ctx.save();ctx.globalAlpha=.28;
+          ctx.fillStyle='rgb(255,0,0)';ctx.fillRect(shift+4,i*stH,W,stH);
+          ctx.fillStyle='rgb(0,255,255)';ctx.fillRect(-shift-4,i*stH,W,stH);
+          ctx.restore();
+        });
+        ctx.globalAlpha=.28*Math.abs(Math.sin(ts*.018));
+        ctx.fillStyle='#000';
+        for(let y=0;y<H;y+=4)ctx.fillRect(0,y,W,1);
+        ctx.globalAlpha=1;
+        if(prog<.18){ctx.fillStyle=`rgba(255,255,255,${(.18-prog)*3})`;ctx.fillRect(0,0,W,H);}
+      }
+      if(prog<1){goAnimRAF=requestAnimationFrame(frame);}
+      else{goAnimRAF=null;ctx.fillStyle='rgba(233,69,96,.22)';ctx.fillRect(0,0,W,H);}
+    }
+    goAnimRAF=requestAnimationFrame(frame);
   }
 
   /* ── RAF LOOP ── */
@@ -1067,6 +1261,7 @@
   }
   function endMulti(winner){
     state='gameover';clearInterval(stepInterval);if(rafId){cancelAnimationFrame(rafId);rafId=null;}
+    if(goAnimRAF){cancelAnimationFrame(goAnimRAF);goAnimRAF=null;}
     SFX.over();
     if(winner==='draw')  updateMsg('Draw! \ud83e\udd1d');
     else if(winner==='p1')updateMsg('\ud83c\udfc6 P1 wins! Score: <strong>'+score+'</strong>');
@@ -1080,12 +1275,13 @@
   }
   function gameOver(){
     state='gameover';clearInterval(stepInterval);if(rafId){cancelAnimationFrame(rafId);rafId=null;}
+    if(goAnimRAF){cancelAnimationFrame(goAnimRAF);goAnimRAF=null;}
     if(activePU){clearTimeout(activePU.timerId);activePU=null;}SFX.over();
     save.stats.maxTime=Math.max(save.stats.maxTime,(Date.now()-gameStartTime)/1000);
     writeSave(save);checkAch();
     drawGrid();drawObstacles();drawFood();drawBonus();drawFieldPU();
     drawOneSnake(snake,prevSnake,dir,getSkin(),1,performance.now());
-    ctx.fillStyle='rgba(233,69,96,.22)';ctx.fillRect(0,0,W,H);
+    playGameOverAnim(snake[0]);
     const tag=gameMode==='countdown'?' (60s)':gameMode==='hard'?' (hard)':'';
     updateMsg('Game over! Score: <strong>'+score+'</strong>'+tag+' &nbsp;|\u00a0\ud83e\ude99 '+save.coins);
     document.getElementById('btn-start').textContent='Restart';
@@ -1095,6 +1291,7 @@
   function restartInterval(){clearInterval(stepInterval);stepInterval=setInterval(doStep,speed);}
   function startGame(){
     clearInterval(stepInterval);if(rafId){cancelAnimationFrame(rafId);rafId=null;}
+    if(goAnimRAF){cancelAnimationFrame(goAnimRAF);goAnimRAF=null;}
     const nv=document.getElementById('name-input').value.trim();
     if(nv){save.name=nv;writeSave(save);}
     initGame();lastStepTime=performance.now();
@@ -1119,6 +1316,7 @@
       mode,
       level: lv,
       skin:  skinId,
+      title: (save.titleUnlocked && save.title) ? save.title.slice(0,15) : '',
       ts:    firebase.firestore.FieldValue.serverTimestamp(),
       date:  new Date().toLocaleDateString('en-GB'),
     });
@@ -1148,10 +1346,11 @@
             snap.docs.map((d, i) => {
               const e = d.data();
               const tag = e.mode === 'countdown' ? '60s' : e.mode === 'hard' ? 'hard' : e.mode === 'multi' ? '2P' : '';
+              const titleHtml=e.title?`<div class="lb-title">${e.title.slice(0,15)}</div>`:'';
               return `<div class="lb-row">
                 <div class="lb-rank">${medals[i] || i + 1}</div>
                 <div class="lb-skin">${skinEmoji(e.skin)}</div>
-                <div class="lb-name">${e.name || 'Anonymous'}</div>
+                <div class="lb-name">${e.name || 'Anonymous'}${titleHtml}</div>
                 <div class="lb-score">${e.score}</div>
                 <div class="lb-info">${tag ? tag + '\u00b7' : ''}L${e.level || 1}${e.date ? '\u00b7' + e.date : ''}</div>
               </div>`;
@@ -1283,7 +1482,7 @@
         card.addEventListener('click',()=>{
           if(save.coins<sk.price){alert('Not enough coins! You have '+save.coins+' \ud83e\ude99');return;}
           save.coins-=sk.price;save.owned.push(sk.id);save.skin=sk.id;
-          writeSave(save);updateUI();renderShop();updateMenuSkin();
+          writeSave(save);checkAch();updateUI();renderShop();updateMenuSkin();
         });
       }
       card.appendChild(pv);card.appendChild(nm);card.appendChild(rar);card.appendChild(bon);card.appendChild(bg);
@@ -1301,6 +1500,79 @@
       });
     }
     spRAF=requestAnimationFrame(animSP);
+
+    // ── Background colour section ──
+    const bgGrid=document.getElementById('shop-bg-grid');bgGrid.innerHTML='';
+    BACKGROUNDS.forEach(bg=>{
+      const owned=save.ownedBgs.includes(bg.id);
+      const active=save.bg===bg.id;
+      const sw=document.createElement('div');
+      sw.className='bg-swatch'+(active?' selected':'')+((!owned&&bg.price>0)?' locked':'');
+      sw.style.background=bg.color;
+      sw.innerHTML=`<div class="bg-swatch-name">${bg.name}</div>`+
+        ((!owned&&bg.price>0)?`<div class="bg-swatch-price">&#129689;${bg.price}</div>`:'');
+      if(active){
+        const tick=document.createElement('div');
+        tick.style.cssText='position:absolute;top:3px;right:5px;color:#4ecca3;font-size:.7rem;font-weight:900';
+        tick.textContent='✓';sw.appendChild(tick);
+      } else if(owned){
+        sw.addEventListener('click',()=>{save.bg=bg.id;writeSave(save);renderShop();});
+      } else {
+        sw.addEventListener('click',()=>{
+          if(save.coins<bg.price){alert('Not enough coins! You have '+save.coins+' \ud83e\ude99');return;}
+          save.coins-=bg.price;save.ownedBgs.push(bg.id);save.bg=bg.id;
+          writeSave(save);updateUI();renderShop();
+        });
+      }
+      bgGrid.appendChild(sw);
+    });
+
+    // ── Game-over animation section ──
+    const animGrid=document.getElementById('shop-anim-grid');animGrid.innerHTML='';
+    GAMEOVER_ANIMS.forEach(an=>{
+      const owned=save.ownedAnims.includes(an.id);
+      const active=save.gameOverAnim===an.id;
+      const card=document.createElement('div');
+      card.className='anim-card'+(active?' selected':'')+((!owned&&an.price>0)?' locked':'');
+      const badge=owned
+        ?(active?'<span class="anim-badge badge-active">Active</span>':'<span class="anim-badge badge-owned">Owned</span>')
+        :`<span class="anim-badge badge-buy">&#129689;${an.price.toLocaleString()}</span>`;
+      card.innerHTML=`<div style="font-size:1.3rem">${an.icon}</div>`+
+        `<div class="anim-name">${an.name}</div>`+
+        `<div class="anim-desc">${an.desc}</div>${badge}`;
+      if(!active&&owned){
+        card.addEventListener('click',()=>{save.gameOverAnim=an.id;writeSave(save);renderShop();});
+      } else if(!owned){
+        card.addEventListener('click',()=>{
+          if(save.coins<an.price){alert('Not enough coins! You have '+save.coins+' \ud83e\ude99');return;}
+          save.coins-=an.price;save.ownedAnims.push(an.id);save.gameOverAnim=an.id;
+          writeSave(save);updateUI();renderShop();
+        });
+      }
+      animGrid.appendChild(card);
+    });
+
+    // ── Title section ──
+    const titLocked=document.getElementById('shop-title-locked');
+    const titOwned=document.getElementById('shop-title-owned');
+    const titBtn=document.getElementById('title-unlock-btn');
+    if(save.titleUnlocked){
+      titLocked.style.display='none';titOwned.style.display='';titBtn.style.display='none';
+      const inp=document.getElementById('title-inp');
+      inp.value=save.title||'';
+      document.getElementById('title-save-btn').onclick=()=>{
+        save.title=(inp.value||'').trim().slice(0,15);writeSave(save);
+        document.getElementById('title-save-btn').textContent='Saved ✓';
+        setTimeout(()=>document.getElementById('title-save-btn').textContent='Save',1500);
+      };
+    } else {
+      titLocked.style.display='';titOwned.style.display='none';
+      titBtn.style.display='';
+      titBtn.onclick=()=>{
+        if(save.coins<1000){alert('Not enough coins! You need 1,000 \ud83e\ude99');return;}
+        save.coins-=1000;save.titleUnlocked=true;writeSave(save);updateUI();renderShop();
+      };
+    }
   }
 
   /* ── ACHIEVEMENTS ── */
