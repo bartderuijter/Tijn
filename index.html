@@ -1886,7 +1886,9 @@
   /* ── HYPER POWER DRAW & LOGIC ── */
   function tryMedicSave(){
     if(getSkin().id==='medic'&&!skinPower.medicUsed){
-      skinPower.medicUsed=true;skinPower.medicFlash=Date.now()+900;SFX.levelup();return true;
+      skinPower.medicUsed=true;skinPower.medicFlash=Date.now()+900;
+      skinPower.medicInvincible=Date.now()+1500; // grace window to turn away
+      SFX.levelup();return true;
     }
     return false;
   }
@@ -2151,10 +2153,11 @@
           return true;
         });
       }
-      // Enemy collision with head (after move) — respect stun and ghost phase
+      // Enemy collision with head (after move) — respect stun, ghost phase, medic
       const nowMs=Date.now();
       if(enemies.some(en=>(en.stunUntil||0)<nowMs&&en.x===snake[0].x&&en.y===snake[0].y)){
         if(!(getSkin().id==='ghost'&&skinPower.ghostPhaseActive)){
+          if(nowMs<(skinPower.medicInvincible||0))return;
           if(tryMedicSave())return;
           return advGameOver();
         }
@@ -2173,15 +2176,17 @@
       if(!tryEat(h1,snake,false))snake.pop();if(!tryEat(h2,snake2,true))snake2.pop();return;
     }
     if(wrapOrKill(h1)||selfCol(h1,snake)){
+      if(Date.now()<(skinPower.medicInvincible||0))return; // grace: freeze until safe dir
       if(tryMedicSave())return;
       if(gameMode==='adventure')return advGameOver();
       return gameOver();
     }
-    // Enemy hit on new head position — respect Zeus stun and Ghost phase
+    // Enemy hit on new head position — respect Zeus stun, Ghost phase, medic
     const nowMs2=Date.now();
     const dangerEn=enemies.filter(e=>(e.stunUntil||0)<nowMs2);
     if(dangerEn.some(e=>e.x===h1.x&&e.y===h1.y)){
       if(!(getSkin().id==='ghost'&&skinPower.ghostPhaseActive)){
+        if(nowMs2<(skinPower.medicInvincible||0))return;
         if(tryMedicSave())return;
         if(gameMode==='adventure')return advGameOver();
         return gameOver();
