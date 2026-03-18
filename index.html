@@ -3486,15 +3486,62 @@
 
   /* ── MYSTERY BOX ── */
   function openMysteryBox(){
-    const pool=[];
-    SKINS.filter(s=>s.price>0&&!s.unlockHint&&!save.owned.includes(s.id)).forEach(s=>pool.push({type:'skin',id:s.id,name:s.name,emoji:s.emoji}));
-    BACKGROUNDS.filter(b=>b.price>0&&!save.ownedBgs.includes(b.id)).forEach(b=>pool.push({type:'bg',id:b.id,name:b.name}));
-    GAMEOVER_ANIMS.filter(a=>a.price>0&&!save.ownedAnims.includes(a.id)).forEach(a=>pool.push({type:'anim',id:a.id,name:a.name}));
-    if(!pool.length){save.coins+=5000;writeSave(save);alert('🎰 Mystery Box: No new items — here are 5,000 coins instead!');return;}
+    // Build a pool of unowned items for a given rarity tier.
+    // Skins use their rarity field; other items are categorised by price.
+    function buildPool(tier){
+      const items=[];
+      const skinRarities=tier==='commonRare'?['common','uncommon','rare']:tier==='epic'?['epic']:['legendary'];
+      const pLow =tier==='commonRare'?1:tier==='epic'?10000:60000;
+      const pHigh=tier==='commonRare'?9999:tier==='epic'?59999:Infinity;
+
+      SKINS.filter(s=>s.price>0&&!s.unlockHint&&skinRarities.includes(s.rarity)&&!save.owned.includes(s.id))
+           .forEach(s=>items.push({type:'skin',id:s.id,name:s.name,emoji:s.emoji}));
+      BACKGROUNDS.filter(b=>b.price>=pLow&&b.price<=pHigh&&!save.ownedBgs.includes(b.id))
+                 .forEach(b=>items.push({type:'bg',id:b.id,name:b.name}));
+      GAMEOVER_ANIMS.filter(a=>a.price>=pLow&&a.price<=pHigh&&!save.ownedAnims.includes(a.id))
+                    .forEach(a=>items.push({type:'anim',id:a.id,name:a.name}));
+      SNAKE_FACES.filter(f=>f.price>=pLow&&f.price<=pHigh&&!save.ownedFaces.includes(f.id))
+                 .forEach(f=>items.push({type:'face',id:f.id,name:f.name,emoji:f.emoji}));
+      DEATH_MSGS.filter(m=>m.price>=pLow&&m.price<=pHigh&&!save.ownedDeathMsgs.includes(m.id))
+                .forEach(m=>items.push({type:'msg',id:m.id,name:m.text}));
+      FIELD_THEMES.filter(t=>t.price>=pLow&&t.price<=pHigh&&!save.ownedThemes.includes(t.id))
+                  .forEach(t=>items.push({type:'theme',id:t.id,name:t.name,emoji:t.emoji}));
+      VICTORY_DANCES.filter(d=>d.price>=pLow&&d.price<=pHigh&&!save.ownedDances.includes(d.id))
+                    .forEach(d=>items.push({type:'dance',id:d.id,name:d.name,emoji:d.emoji}));
+      MUSIC_TRACKS.filter(t=>t.price>=pLow&&t.price<=pHigh&&!save.ownedMusic.includes(t.id))
+                  .forEach(t=>items.push({type:'music',id:t.id,name:t.name}));
+      BORDERS_LIST.filter(b=>b.price>=pLow&&b.price<=pHigh&&!save.ownedBorders.includes(b.id))
+                  .forEach(b=>items.push({type:'border',id:b.id,name:b.name}));
+      return items;
+    }
+
+    const crPool  =buildPool('commonRare');
+    const epicPool=buildPool('epic');
+    const legPool =buildPool('legendary');
+
+    // Pick tier with 60/30/10 chances; fall through to next if tier is exhausted.
+    const roll=Math.random();
+    let pool;
+    if(roll<0.10){
+      pool=legPool.length?legPool:epicPool.length?epicPool:crPool;
+    } else if(roll<0.40){
+      pool=epicPool.length?epicPool:legPool.length?legPool:crPool;
+    } else {
+      pool=crPool.length?crPool:epicPool.length?epicPool:legPool;
+    }
+
+    if(!pool.length){alert('🎰 Mystery Box: You own everything — nothing left to unlock!');return;}
+
     const prize=pool[Math.floor(Math.random()*pool.length)];
-    if(prize.type==='skin'){save.owned.push(prize.id);save.skin=prize.id;}
-    else if(prize.type==='bg'){save.ownedBgs.push(prize.id);save.bg=prize.id;}
-    else if(prize.type==='anim'){save.ownedAnims.push(prize.id);save.gameOverAnim=prize.id;}
+    if     (prize.type==='skin')  {save.owned.push(prize.id);save.skin=prize.id;}
+    else if(prize.type==='bg')    {save.ownedBgs.push(prize.id);save.bg=prize.id;}
+    else if(prize.type==='anim')  {save.ownedAnims.push(prize.id);save.gameOverAnim=prize.id;}
+    else if(prize.type==='face')  {save.ownedFaces.push(prize.id);save.activeFace=prize.id;}
+    else if(prize.type==='msg')   {save.ownedDeathMsgs.push(prize.id);save.activeDeathMsg=prize.id;}
+    else if(prize.type==='theme') {save.ownedThemes.push(prize.id);save.activeTheme=prize.id;}
+    else if(prize.type==='dance') {save.ownedDances.push(prize.id);save.activeDance=prize.id;}
+    else if(prize.type==='music') {save.ownedMusic.push(prize.id);save.activeMusic=prize.id;}
+    else if(prize.type==='border'){save.ownedBorders.push(prize.id);save.activeBorder=prize.id;}
     writeSave(save);updateMenuSkin();
     alert('🎰 Mystery Box: You got '+prize.name+'! '+(prize.emoji||'🎁'));
   }
